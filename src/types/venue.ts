@@ -19,6 +19,8 @@ export interface Venue {
   link?: string;
   /** 태그 (합주실, 라이브홀 등) */
   tags?: string[];
+  /** 유저 업로드 사진 URL 목록 */
+  photos?: string[];
   createdAt?: { seconds: number };
   updatedAt?: { seconds: number };
 }

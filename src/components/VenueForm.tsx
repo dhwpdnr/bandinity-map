@@ -192,7 +192,7 @@ export function VenueForm({ initialData }: VenueFormProps) {
         </div>
         {coordStatus === "ok" && (
           <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
-            좌표 확인 완료 ({form.lat.toFixed(5)}, {form.lng.toFixed(5)})
+            주소 확인 완료
           </p>
         )}
         {coordStatus === "fail" && (

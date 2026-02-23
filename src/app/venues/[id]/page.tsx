@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getVenueById } from "@/lib/venues";
 import { VenueMap } from "@/components/VenueMap";
+import { VenueGallery } from "@/components/VenueGallery";
 import { Logo } from "@/components/Logo";
 
 interface PageProps {
@@ -39,11 +40,30 @@ export default async function VenueDetailPage({ params }: PageProps) {
       </header>
 
       <main className="mx-auto w-full max-w-4xl flex-1 p-4 pb-8">
-        <div className="mb-4 h-[220px] w-full overflow-hidden rounded-xl sm:h-[280px]">
-          <VenueMap venues={[venue]} selectedId={venue.id} />
+        {/* 대표 이미지 */}
+        <div className="mb-4 aspect-video w-full overflow-hidden rounded-xl sm:aspect-[21/9]">
+          {venue.imageUrl ? (
+            <img
+              src={venue.imageUrl}
+              alt={venue.name}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <Link
+              href={`/venues/${venue.id}/edit`}
+              className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-zinc-300 bg-zinc-50 transition hover:border-amber-400 hover:bg-amber-50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-amber-600 dark:hover:bg-amber-900/20"
+            >
+              <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                대표 사진을 추가해 주세요
+              </span>
+              <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                정보 수정에서 등록할 수 있어요
+              </span>
+            </Link>
+          )}
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-6">
+        <div className="mb-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-6">
           <dl className="space-y-3">
             {venue.region && (
               <div>
@@ -106,6 +126,16 @@ export default async function VenueDetailPage({ params }: PageProps) {
               </div>
             )}
           </dl>
+        </div>
+
+        {/* 사진 갤러리 */}
+        <div className="mb-6">
+          <VenueGallery venueId={venue.id} photos={venue.photos ?? []} />
+        </div>
+
+        {/* 지도 (최하단) */}
+        <div className="h-[220px] w-full overflow-hidden rounded-xl sm:h-[280px]">
+          <VenueMap venues={[venue]} selectedId={venue.id} />
         </div>
       </main>
     </div>

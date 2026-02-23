@@ -8,6 +8,7 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  arrayUnion,
   type DocumentData,
   type Timestamp,
 } from "firebase/firestore";
@@ -67,6 +68,16 @@ export async function updateVenue(id: string, data: Partial<VenueInput>): Promis
   const ref = doc(db, VENUES_COLLECTION, id);
   await updateDoc(ref, {
     ...data,
+    updatedAt: serverTimestamp(),
+  });
+}
+
+/** 공연장 사진 추가 (유저 업로드) */
+export async function addVenuePhoto(venueId: string, photoUrl: string): Promise<void> {
+  if (!db) return;
+  const ref = doc(db, VENUES_COLLECTION, venueId);
+  await updateDoc(ref, {
+    photos: arrayUnion(photoUrl),
     updatedAt: serverTimestamp(),
   });
 }
