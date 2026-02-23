@@ -11,10 +11,17 @@ interface VenueCardProps {
 
 export function VenueCard({ venue, isSelected, onSelect }: VenueCardProps) {
   return (
-    <Link
-      href={`/venues/${venue.id}`}
-      onClick={onSelect}
-      className={`block rounded-xl border bg-white p-4 shadow-sm transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500/50 dark:bg-zinc-900 dark:hover:shadow-zinc-900 ${
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => onSelect?.()}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect?.();
+        }
+      }}
+      className={`block cursor-pointer rounded-xl border bg-white p-4 shadow-sm transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500/50 dark:bg-zinc-900 dark:hover:shadow-zinc-900 ${
         isSelected
           ? "border-amber-500 ring-2 ring-amber-500/30 dark:border-amber-500"
           : "border-zinc-200 dark:border-zinc-800"
@@ -52,8 +59,17 @@ export function VenueCard({ venue, isSelected, onSelect }: VenueCardProps) {
               ))}
             </div>
           )}
+          {isSelected && (
+            <Link
+              href={`/venues/${venue.id}`}
+              className="mt-3 inline-flex items-center gap-1 rounded-lg bg-amber-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
+              onClick={(e) => e.stopPropagation()}
+            >
+              상세정보 보러가기 →
+            </Link>
+          )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
