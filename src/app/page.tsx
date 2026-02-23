@@ -1,64 +1,80 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
+import { getVenues } from "@/lib/venues";
+import { VenueMap } from "@/components/VenueMap";
+import { VenueList } from "@/components/VenueList";
+import { Logo } from "@/components/Logo";
+import type { Venue } from "@/types/venue";
 
 export default function Home() {
+  const [venues, setVenues] = useState<Venue[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const loadVenues = useCallback(async () => {
+    setLoading(true);
+    try {
+      const list = await getVenues();
+      setVenues(list);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadVenues();
+  }, [loadVenues]);
+
+  const filteredVenues = venues;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="flex min-h-dvh flex-col bg-zinc-50 dark:bg-zinc-950">
+      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/95 dark:supports-[backdrop-filter]:bg-zinc-900/80">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          <h1><Logo /></h1>
+          <Link
+            href="/venues/new"
+            className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <span className="text-base leading-none">+</span>
+            공연장 추가
+          </Link>
+        </div>
+      </header>
+
+      <main className="flex flex-1 flex-col gap-4 p-4 md:flex-row md:gap-6 md:p-6">
+        <section className="flex flex-col md:min-h-[400px] md:flex-1 md:basis-0">
+          <div className="h-[280px] w-full sm:h-[320px] md:h-full md:min-h-[420px]">
+            <VenueMap
+              venues={filteredVenues}
+              selectedId={selectedId}
+              onSelectVenue={(v) => setSelectedId(v?.id ?? null)}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          </div>
+        </section>
+
+        <aside className="flex flex-col md:w-[360px] md:shrink-0 lg:w-[400px]">
+          <div className="mb-2 flex items-center justify-between">
+            <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+              공연장 목록 ({filteredVenues.length}곳)
+            </h2>
+          </div>
+          {loading ? (
+            <div className="flex items-center justify-center rounded-xl border border-zinc-200 bg-white py-12 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+              로딩 중...
+            </div>
+          ) : (
+            <div className="max-h-[50vh] overflow-y-auto md:max-h-none">
+              <VenueList
+                venues={filteredVenues}
+                selectedId={selectedId}
+                onSelectVenue={(v) => setSelectedId(v?.id ?? null)}
+              />
+            </div>
+          )}
+        </aside>
       </main>
     </div>
   );
