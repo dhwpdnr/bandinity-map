@@ -1,0 +1,10 @@
+rules_version = '2';
+// 공연장 위키: 회원가입 없이 누구나 읽기/쓰기 가능.
+// 악의적 사용 방지를 원하면 Firebase App Check 또는 별도 인증 도입을 권장합니다.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /venues/{venueId} {
+      allow read, write: if true;
+    }
+  }
+}

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useKakaoLoader } from "react-kakao-maps-sdk";
 import { addVenue, updateVenue, type VenueInput } from "@/lib/venues";
+import { ImageUpload } from "@/components/ImageUpload";
 import type { Venue } from "@/types/venue";
 
 interface VenueFormProps {
@@ -55,15 +56,32 @@ export function VenueForm({ initialData }: VenueFormProps) {
 
   /** 주소 입력 후 좌표 자동 변환 */
   function geocodeAddress() {
-    if (!form.address || loading) return;
-    if (typeof window === "undefined" || !window.kakao?.maps?.services) return;
+    if (!form.address) return;
+    if (loading) {
+      setError("카카오 지도 API 로딩 중입니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
+
+    // kakao.maps.services 가 준비됐는지 확인
+    const kakao = (window as unknown as { kakao?: { maps?: { services?: unknown } } }).kakao;
+    if (!kakao?.maps?.services) {
+      setError(
+        "주소 검색 서비스를 불러오지 못했습니다. 카카오 API 키와 도메인 설정을 확인해 주세요."
+      );
+      return;
+    }
 
     setGeocoding(true);
     setCoordStatus("idle");
-    const geocoder = new window.kakao.maps.services.Geocoder();
-    geocoder.addressSearch(form.address, (result, status) => {
+    setError("");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const services = (window as any).kakao.maps.services;
+    const geocoder = new services.Geocoder();
+
+    geocoder.addressSearch(form.address, (result: { y: string; x: string }[], status: string) => {
       setGeocoding(false);
-      if (status === window.kakao.maps.services.Status.OK && result[0]) {
+      if (status === services.Status.OK && result[0]) {
         setForm((prev) => ({
           ...prev,
           lat: parseFloat(result[0].y),
@@ -207,13 +225,10 @@ export function VenueForm({ initialData }: VenueFormProps) {
       </Field>
 
       {/* 대표 이미지 */}
-      <Field label="대표 이미지 URL">
-        <input
-          name="imageUrl"
-          value={form.imageUrl}
-          onChange={handleChange}
-          placeholder="https://..."
-          className={inputCls}
+      <Field label="대표 이미지">
+        <ImageUpload
+          value={form.imageUrl ?? ""}
+          onChange={(url) => setForm((prev) => ({ ...prev, imageUrl: url }))}
         />
       </Field>
 

@@ -16,6 +16,7 @@ interface VenueMapProps {
 export function VenueMap({ venues, selectedId, onSelectVenue }: VenueMapProps) {
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY ?? "",
+    libraries: ["services"],
   });
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const [level, setLevel] = useState(8);
