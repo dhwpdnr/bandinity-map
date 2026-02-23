@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useKakaoLoader, Map, MapMarker } from "react-kakao-maps-sdk";
+import { useKakaoLoader, Map, MapMarker, MarkerClusterer } from "react-kakao-maps-sdk";
 import Link from "next/link";
 import type { Venue } from "@/types/venue";
 
-/** 카카오 인포윈도우가 감싸는 흰색 박스 배경 제거 */
+/** 카카오 인포윈도우가 감싸는 흰색 박스 배경 제거 + 팝업이 다른 마커 위에 보이도록 z-index 상승 */
 function PopupContent({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -18,6 +18,7 @@ function PopupContent({ children }: { children: React.ReactNode }) {
         parent.style.backgroundColor = "transparent";
         parent.style.border = "none";
         parent.style.boxShadow = "none";
+        parent.style.zIndex = "1000";
         parent = parent.parentElement;
       }
     };
@@ -64,7 +65,7 @@ interface VenueMapProps {
 export function VenueMap({ venues, selectedId, onSelectVenue }: VenueMapProps) {
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY ?? "",
-    libraries: ["services"],
+    libraries: ["services", "clusterer"],
   });
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const [level, setLevel] = useState(8);
@@ -113,41 +114,67 @@ export function VenueMap({ venues, selectedId, onSelectVenue }: VenueMapProps) {
         isPanto
         onClick={() => onSelectVenue?.(null)}
       >
-        {venues.map((venue) => {
-          const isSelected = selectedId === venue.id;
-          return (
-            <MapMarker
-              key={venue.id}
-              position={{ lat: venue.lat, lng: venue.lng }}
-              title={venue.name}
-              clickable
-              zIndex={isSelected ? 10 : 1}
-              image={{
-                src: isSelected ? MARKER_PIN_SELECTED : MARKER_PIN_DEFAULT,
-                size: MARKER_SIZE,
-                options: { offset: MARKER_OFFSET },
-              }}
-              onClick={() => handleMarkerClick(venue)}
-            >
-              {isSelected && (
-                <PopupContent>
-                  <div className="rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 shadow-md dark:border-zinc-700 dark:bg-zinc-800">
-                    <p className="truncate max-w-[160px] text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                      {venue.name}
-                    </p>
-                    <Link
-                      href={`/venues/${venue.id}`}
-                      className="mt-0.5 block text-xs text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      상세정보 보러가기 →
-                    </Link>
-                  </div>
-                </PopupContent>
-              )}
-            </MapMarker>
-          );
-        })}
+        <MarkerClusterer
+          averageCenter
+          minLevel={6}
+          gridSize={60}
+          minClusterSize={2}
+          texts={(size) => `${size}개 공연장`}
+          styles={[
+            {
+              width: "56px",
+              height: "56px",
+              background: "#27272a",
+              borderRadius: "50%",
+              color: "#fff",
+              fontSize: "11px",
+              fontWeight: "600",
+              lineHeight: "56px",
+              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxSizing: "border-box",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+            },
+          ]}
+        >
+          {venues.map((venue) => {
+            const isSelected = selectedId === venue.id;
+            return (
+              <MapMarker
+                key={venue.id}
+                position={{ lat: venue.lat, lng: venue.lng }}
+                title={venue.name}
+                clickable
+                zIndex={isSelected ? 1000 : 1}
+                image={{
+                  src: isSelected ? MARKER_PIN_SELECTED : MARKER_PIN_DEFAULT,
+                  size: MARKER_SIZE,
+                  options: { offset: MARKER_OFFSET },
+                }}
+                onClick={() => handleMarkerClick(venue)}
+              >
+                {isSelected && (
+                  <PopupContent>
+                    <div className="rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 shadow-md dark:border-zinc-700 dark:bg-zinc-800">
+                      <p className="truncate max-w-[160px] text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                        {venue.name}
+                      </p>
+                      <Link
+                        href={`/venues/${venue.id}`}
+                        className="mt-0.5 block text-xs text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        상세정보 보러가기 →
+                      </Link>
+                    </div>
+                  </PopupContent>
+                )}
+              </MapMarker>
+            );
+          })}
+        </MarkerClusterer>
       </Map>
     </div>
   );
