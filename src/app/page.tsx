@@ -8,10 +8,22 @@ import { VenueList } from "@/components/VenueList";
 import { Logo } from "@/components/Logo";
 import type { Venue } from "@/types/venue";
 
+/** 지역별 개수 세서 많은 순 정렬 (전체 제외) */
+function getRegionsByCount(venues: Venue[]): string[] {
+  const count: Record<string, number> = {};
+  for (const v of venues) {
+    if (v.region) count[v.region] = (count[v.region] ?? 0) + 1;
+  }
+  return Object.entries(count)
+    .sort((a, b) => b[1] - a[1])
+    .map(([region]) => region);
+}
+
 export default function Home() {
   const [venues, setVenues] = useState<Venue[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<string>("전체");
 
   const loadVenues = useCallback(async () => {
     setLoading(true);
@@ -27,7 +39,11 @@ export default function Home() {
     loadVenues();
   }, [loadVenues]);
 
-  const filteredVenues = venues;
+  const regionChips = ["전체", ...getRegionsByCount(venues)];
+  const filteredVenues =
+    selectedRegion === "전체"
+      ? venues
+      : venues.filter((v) => v.region === selectedRegion);
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-zinc-50 dark:bg-zinc-950">
@@ -64,6 +80,24 @@ export default function Home() {
               공연장 목록 ({filteredVenues.length}곳)
             </h2>
           </div>
+          {!loading && regionChips.length > 0 && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              {regionChips.map((region) => (
+                <button
+                  key={region}
+                  type="button"
+                  onClick={() => setSelectedRegion(region)}
+                  className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+                    selectedRegion === region
+                      ? "bg-amber-500 text-white dark:bg-amber-600"
+                      : "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600"
+                  }`}
+                >
+                  {region}
+                </button>
+              ))}
+            </div>
+          )}
           {loading ? (
             <div className="flex min-h-0 flex-1 items-center justify-center overflow-y-auto rounded-xl border border-zinc-200 bg-white py-12 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
               로딩 중...

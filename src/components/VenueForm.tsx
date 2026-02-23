@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useKakaoLoader } from "react-kakao-maps-sdk";
-import { addVenue, updateVenue, type VenueInput } from "@/lib/venues";
+import { addVenue, updateVenue, getVenues, type VenueInput } from "@/lib/venues";
 import { ImageUpload } from "@/components/ImageUpload";
 import type { Venue } from "@/types/venue";
+
+const NEW_REGION_VALUE = "__new_region__";
 
 interface VenueFormProps {
   /** 수정 시 기존 데이터 전달, 없으면 신규 추가 */
@@ -57,6 +59,37 @@ export function VenueForm({ initialData }: VenueFormProps) {
   const [coordStatus, setCoordStatus] = useState<"idle" | "ok" | "fail">(
     "idle",
   );
+  /** 기존 공연장에서 추출한 지역 목록 + 이번 세션에서 추가한 지역 */
+  const [regionOptions, setRegionOptions] = useState<string[]>([]);
+  const [regionSelectValue, setRegionSelectValue] = useState<string>("");
+  const [newRegionInput, setNewRegionInput] = useState("");
+  const [regionsLoading, setRegionsLoading] = useState(true);
+
+  useEffect(() => {
+    getVenues()
+      .then((venues) => {
+        const regions = Array.from(
+          new Set(venues.map((v) => v.region).filter(Boolean)),
+        ).sort((a, b) => a.localeCompare(b));
+        setRegionOptions(regions);
+        if (initialData?.region && !regions.includes(initialData.region)) {
+          setRegionOptions((prev) =>
+            [...prev, initialData!.region].sort((a, b) => a.localeCompare(b)),
+          );
+        }
+        if (initialData?.region) {
+          setRegionSelectValue(initialData.region);
+        }
+      })
+      .finally(() => setRegionsLoading(false));
+  }, [initialData?.region]);
+
+  /** 폼 region과 셀렉트 동기화 */
+  useEffect(() => {
+    if (regionSelectValue && regionSelectValue !== NEW_REGION_VALUE) {
+      setForm((prev) => ({ ...prev, region: regionSelectValue }));
+    }
+  }, [regionSelectValue]);
 
   /** 주소 입력 후 좌표 자동 변환 */
   function geocodeAddress() {
@@ -124,6 +157,21 @@ export function VenueForm({ initialData }: VenueFormProps) {
     }));
   }
 
+  function addNewRegion() {
+    const name = newRegionInput.trim();
+    if (!name) return;
+    if (regionOptions.includes(name)) {
+      setRegionSelectValue(name);
+      setNewRegionInput("");
+      return;
+    }
+    const next = [...regionOptions, name].sort((a, b) => a.localeCompare(b));
+    setRegionOptions(next);
+    setRegionSelectValue(name);
+    setForm((prev) => ({ ...prev, region: name }));
+    setNewRegionInput("");
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.name || !form.address || !form.region) {
@@ -168,13 +216,62 @@ export function VenueForm({ initialData }: VenueFormProps) {
 
       {/* 지역 */}
       <Field label="지역" required>
-        <input
-          name="region"
-          value={form.region}
-          onChange={handleChange}
-          placeholder="예) 서울, 부산"
-          className={inputCls}
-        />
+        <div className="space-y-2">
+          <select
+            name="region"
+            value={
+              regionSelectValue === NEW_REGION_VALUE
+                ? NEW_REGION_VALUE
+                : form.region || regionSelectValue
+            }
+            onChange={(e) => {
+              const v = e.target.value;
+              setRegionSelectValue(v);
+              if (v !== NEW_REGION_VALUE) {
+                setForm((prev) => ({ ...prev, region: v }));
+              } else {
+                setForm((prev) => ({ ...prev, region: "" }));
+              }
+            }}
+            disabled={regionsLoading}
+            className={inputCls}
+          >
+            <option value="">
+              {regionsLoading ? "지역 목록 불러오는 중…" : "지역 선택"}
+            </option>
+            {regionOptions.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+            <option value={NEW_REGION_VALUE}>+ 새 지역 추가</option>
+          </select>
+          {regionSelectValue === NEW_REGION_VALUE && (
+            <div className="flex gap-2">
+              <input
+                value={newRegionInput}
+                onChange={(e) => setNewRegionInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addNewRegion();
+                  }
+                }}
+                placeholder="예) 서울, 부산, 경기"
+                className={inputCls}
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={addNewRegion}
+                disabled={!newRegionInput.trim()}
+                className="shrink-0 rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-40 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                추가
+              </button>
+            </div>
+          )}
+        </div>
       </Field>
 
       {/* 주소 + 좌표 변환 */}
