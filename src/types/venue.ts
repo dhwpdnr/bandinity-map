@@ -11,8 +11,10 @@ export interface Venue {
   region: string;
   /** 연락처 */
   phone?: string;
-  /** 설명 */
-  description?: string;
+  /** 가격 정보 (요일별 등, 자유 형식 문자열) */
+  priceInfo?: string;
+  /** 장비 정보 (드럼, 앰프, PA 등) */
+  equipment?: string;
   /** 대표 이미지 URL */
   imageUrl?: string;
   /** 홈페이지/예약 링크 */

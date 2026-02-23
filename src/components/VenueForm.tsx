@@ -19,7 +19,8 @@ const EMPTY: VenueInput = {
   lng: 0,
   region: "",
   phone: "",
-  description: "",
+  priceInfo: "",
+  equipment: "",
   imageUrl: "",
   link: "",
   tags: [],
@@ -41,18 +42,21 @@ export function VenueForm({ initialData }: VenueFormProps) {
           lng: initialData.lng,
           region: initialData.region,
           phone: initialData.phone ?? "",
-          description: initialData.description ?? "",
+          priceInfo: initialData.priceInfo ?? "",
+          equipment: initialData.equipment ?? "",
           imageUrl: initialData.imageUrl ?? "",
           link: initialData.link ?? "",
           tags: initialData.tags ?? [],
         }
-      : EMPTY
+      : EMPTY,
   );
   const [tagInput, setTagInput] = useState("");
   const [geocoding, setGeocoding] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [coordStatus, setCoordStatus] = useState<"idle" | "ok" | "fail">("idle");
+  const [coordStatus, setCoordStatus] = useState<"idle" | "ok" | "fail">(
+    "idle",
+  );
 
   /** 주소 입력 후 좌표 자동 변환 */
   function geocodeAddress() {
@@ -63,10 +67,12 @@ export function VenueForm({ initialData }: VenueFormProps) {
     }
 
     // kakao.maps.services 가 준비됐는지 확인
-    const kakao = (window as unknown as { kakao?: { maps?: { services?: unknown } } }).kakao;
+    const kakao = (
+      window as unknown as { kakao?: { maps?: { services?: unknown } } }
+    ).kakao;
     if (!kakao?.maps?.services) {
       setError(
-        "주소 검색 서비스를 불러오지 못했습니다. 카카오 API 키와 도메인 설정을 확인해 주세요."
+        "주소 검색 서비스를 불러오지 못했습니다. 카카오 API 키와 도메인 설정을 확인해 주세요.",
       );
       return;
     }
@@ -79,23 +85,26 @@ export function VenueForm({ initialData }: VenueFormProps) {
     const services = (window as any).kakao.maps.services;
     const geocoder = new services.Geocoder();
 
-    geocoder.addressSearch(form.address, (result: { y: string; x: string }[], status: string) => {
-      setGeocoding(false);
-      if (status === services.Status.OK && result[0]) {
-        setForm((prev) => ({
-          ...prev,
-          lat: parseFloat(result[0].y),
-          lng: parseFloat(result[0].x),
-        }));
-        setCoordStatus("ok");
-      } else {
-        setCoordStatus("fail");
-      }
-    });
+    geocoder.addressSearch(
+      form.address,
+      (result: { y: string; x: string }[], status: string) => {
+        setGeocoding(false);
+        if (status === services.Status.OK && result[0]) {
+          setForm((prev) => ({
+            ...prev,
+            lat: parseFloat(result[0].y),
+            lng: parseFloat(result[0].x),
+          }));
+          setCoordStatus("ok");
+        } else {
+          setCoordStatus("fail");
+        }
+      },
+    );
   }
 
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -213,6 +222,18 @@ export function VenueForm({ initialData }: VenueFormProps) {
         />
       </Field>
 
+      {/* 가격 정보 */}
+      <Field label="가격 정보">
+        <textarea
+          name="priceInfo"
+          value={form.priceInfo}
+          onChange={handleChange}
+          rows={4}
+          placeholder={`평일(월~목) : 6시간 50만원\n금,토 : 6시간 70만원\n일 : 6시간 60만원`}
+          className={`${inputCls} resize-none whitespace-pre-wrap break-words overflow-auto`}
+        />
+      </Field>
+
       {/* 예약/홈페이지 */}
       <Field label="예약 / 홈페이지 URL">
         <input
@@ -232,15 +253,15 @@ export function VenueForm({ initialData }: VenueFormProps) {
         />
       </Field>
 
-      {/* 소개 */}
-      <Field label="소개">
+      {/* 장비 정보 */}
+      <Field label="장비 정보">
         <textarea
-          name="description"
-          value={form.description}
+          name="equipment"
+          value={form.equipment}
           onChange={handleChange}
-          rows={3}
-          placeholder="공연장 소개, 특징, 수용 인원 등"
-          className={`${inputCls} resize-none`}
+          rows={10}
+          placeholder={`이렇게 작성하면 좋아요!\n\n기타\nJCM2000+1960A\n\n베이스\nMarkBass LM 250+104HF\n\n드럼\nDW Design Series 5' + 14"H/ 16",18",20"심벌`}
+          className={`${inputCls} resize-none break-words overflow-auto`}
         />
       </Field>
 
@@ -316,7 +337,7 @@ export function VenueForm({ initialData }: VenueFormProps) {
 }
 
 const inputCls =
-  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500";
+  "w-full min-w-0 box-border rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500";
 
 function Field({
   label,

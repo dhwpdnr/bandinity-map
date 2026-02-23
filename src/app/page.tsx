@@ -66,7 +66,7 @@ export default function Home() {
               로딩 중...
             </div>
           ) : (
-            <div className="max-h-[50vh] overflow-y-auto md:max-h-none">
+            <div className="min-h-0">
               <VenueList
                 venues={filteredVenues}
                 selectedId={selectedId}

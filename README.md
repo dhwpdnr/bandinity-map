@@ -1,6 +1,5 @@
 # 공연장 지도 (Bandinity Map)
 
-[밴드룸](https://www.band-room.com/) 스타일을 참고한 **공연장 정보 지도** 서비스입니다.  
 지도를 메인으로 두고, 카카오 지도 위에 공연장·합주실·라이브홀을 표시합니다.
 
 ## 기능
@@ -34,18 +33,18 @@ cp .env.local.example .env.local
 
 Firestore에 `venues` 컬렉션을 만들고, 아래 필드로 문서를 추가합니다.
 
-| 필드       | 타입     | 필수 | 설명           |
-|-----------|----------|------|----------------|
-| name      | string   | O    | 공연장 이름     |
-| address   | string   | O    | 주소           |
-| lat       | number   | O    | 위도           |
-| lng       | number   | O    | 경도           |
-| region    | string   | O    | 지역 (예: 서울) |
-| phone     | string   |      | 연락처         |
-| description | string |      | 소개           |
-| imageUrl  | string   |      | 대표 이미지 URL |
-| link      | string   |      | 예약/홈페이지 URL |
-| tags      | array    |      | 태그 (예: 합주실, 라이브홀) |
+| 필드        | 타입   | 필수 | 설명                        |
+| ----------- | ------ | ---- | --------------------------- |
+| name        | string | O    | 공연장 이름                 |
+| address     | string | O    | 주소                        |
+| lat         | number | O    | 위도                        |
+| lng         | number | O    | 경도                        |
+| region      | string | O    | 지역 (예: 서울)             |
+| phone       | string |      | 연락처                      |
+| description | string |      | 소개                        |
+| imageUrl    | string |      | 대표 이미지 URL             |
+| link        | string |      | 예약/홈페이지 URL           |
+| tags        | array  |      | 태그 (예: 합주실, 라이브홀) |
 
 Firestore에서 **인덱스**가 필요할 수 있습니다. `venues` 컬렉션에 `name` 오름차순 정렬을 사용하므로, 첫 쿼리 시 콘솔에 나오는 인덱스 생성 링크를 통해 복합 인덱스를 만들어 주세요.
 
@@ -79,6 +78,7 @@ src/
 
 ## 참고
 
-- [밴드룸](https://www.band-room.com/) – 합주실 빈 시간 조회 서비스
 - [카카오 지도 API](https://apis.map.kakao.com/web/)
 - [react-kakao-maps-sdk](https://react-kakao-maps-sdk.jaeseokim.dev/)
+
+Made by cursor

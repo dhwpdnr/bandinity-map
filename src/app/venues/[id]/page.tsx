@@ -90,11 +90,19 @@ export default async function VenueDetailPage({ params }: PageProps) {
                 </dd>
               </div>
             )}
-            {venue.description && (
+            {venue.priceInfo && (
               <div>
-                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">소개</dt>
+                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">가격 정보</dt>
                 <dd className="whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
-                  {venue.description}
+                  {venue.priceInfo}
+                </dd>
+              </div>
+            )}
+            {venue.equipment && (
+              <div>
+                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">장비 정보</dt>
+                <dd className="whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
+                  {venue.equipment}
                 </dd>
               </div>
             )}
