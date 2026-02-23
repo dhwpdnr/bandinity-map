@@ -1,4 +1,4 @@
-/** 공연장(밴드룸/라이브홀 등) 타입 */
+/** 공연장(라이브홀 등) 타입 */
 export interface Venue {
   id: string;
   name: string;

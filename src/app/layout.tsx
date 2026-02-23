@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "공연장 지도 | 밴드룸·라이브홀 찾기",
+  title: "공연장 지도 | 라이브홀 찾기",
   description: "지도에서 공연장·합주실·라이브홀을 한눈에 찾아보세요.",
 };
 
