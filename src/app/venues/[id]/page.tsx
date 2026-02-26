@@ -4,6 +4,7 @@ import { getVenueById } from "@/lib/venues";
 import { VenueMap } from "@/components/VenueMap";
 import { VenueGallery } from "@/components/VenueGallery";
 import { Logo } from "@/components/Logo";
+import { CoachingMark } from "@/components/CoachingMark";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -30,12 +31,18 @@ export default async function VenueDetailPage({ params }: PageProps) {
           <h1 className="min-w-0 flex-1 truncate text-sm font-medium text-zinc-600 dark:text-zinc-400">
             {venue.name}
           </h1>
-          <Link
-            href={`/venues/${venue.id}/edit`}
-            className="shrink-0 rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
-          >
-            정보 수정
-          </Link>
+          <div className="relative shrink-0">
+            <CoachingMark
+              storageKey="coaching-venue-edit"
+              text="잘못된 정보가 있으면 수정해 주세요"
+            />
+            <Link
+              href={`/venues/${venue.id}/edit`}
+              className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            >
+              정보 수정
+            </Link>
+          </div>
         </div>
       </header>
 

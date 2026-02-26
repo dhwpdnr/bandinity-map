@@ -6,6 +6,7 @@ import { getVenues } from "@/lib/venues";
 import { VenueMap } from "@/components/VenueMap";
 import { VenueList } from "@/components/VenueList";
 import { Logo } from "@/components/Logo";
+import { CoachingMark } from "@/components/CoachingMark";
 import type { Venue } from "@/types/venue";
 
 /** 지역별 개수 세서 많은 순 정렬 (전체 제외) */
@@ -50,13 +51,20 @@ export default function Home() {
       <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/95 dark:supports-[backdrop-filter]:bg-zinc-900/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <h1><Logo /></h1>
-          <Link
-            href="/venues/new"
-            className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
-          >
-            <span className="text-base leading-none">+</span>
-            공연장 추가
-          </Link>
+          <div className="relative">
+            <CoachingMark
+              storageKey="coaching-venue-add"
+              text="목록에 없는 공연장을 추가할 수 있어요"
+              tailRight="right-5"
+            />
+            <Link
+              href="/venues/new"
+              className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
+            >
+              <span className="text-base leading-none">+</span>
+              공연장 추가
+            </Link>
+          </div>
         </div>
       </header>
 
