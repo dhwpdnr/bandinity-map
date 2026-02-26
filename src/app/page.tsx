@@ -25,6 +25,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<string>("전체");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const loadVenues = useCallback(async () => {
     setLoading(true);
@@ -41,30 +42,38 @@ export default function Home() {
   }, [loadVenues]);
 
   const regionChips = ["전체", ...getRegionsByCount(venues)];
-  const filteredVenues =
+  const byRegion =
     selectedRegion === "전체"
       ? venues
       : venues.filter((v) => v.region === selectedRegion);
+  const query = searchQuery.trim().toLowerCase();
+  const filteredVenues = query
+    ? byRegion.filter((v) => v.name.toLowerCase().includes(query))
+    : byRegion;
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-zinc-50 dark:bg-zinc-950">
       <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/95 dark:supports-[backdrop-filter]:bg-zinc-900/80">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <h1><Logo /></h1>
-          <div className="relative">
-            <CoachingMark
-              storageKey="coaching-venue-add"
-              text="목록에 없는 공연장을 추가할 수 있어요"
-              tailRight="right-5"
+        {/* 모바일: 로고 + 검색창 나란히 / 넓은 화면: 로고 왼쪽 고정, 검색창 뷰포트 정중앙 */}
+        <div className="flex w-full items-center gap-3 px-4 py-3 sm:gap-4 md:grid md:grid-cols-[1fr_auto_1fr] md:px-6">
+          <h1 className="flex shrink-0 min-w-0 justify-self-start md:min-w-0">
+            <Logo />
+          </h1>
+          <div className="flex min-w-0 flex-1 justify-center md:flex-initial md:flex-none md:justify-center">
+            <label className="sr-only" htmlFor="venue-search">
+              공연장 이름 검색
+            </label>
+            <input
+              id="venue-search"
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="공연장 이름 검색"
+              className="w-full min-w-0 max-w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:focus:border-amber-500 dark:focus:ring-amber-500 md:min-w-[360px] md:max-w-xl"
+              autoComplete="off"
             />
-            <Link
-              href="/venues/new"
-              className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
-            >
-              <span className="text-base leading-none">+</span>
-              공연장 추가
-            </Link>
           </div>
+          <div className="hidden min-w-0 md:block" aria-hidden />
         </div>
       </header>
 
@@ -87,6 +96,20 @@ export default function Home() {
             <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
               공연장 목록 ({filteredVenues.length}곳)
             </h2>
+            <div className="relative">
+              <CoachingMark
+                storageKey="coaching-venue-add"
+                text="목록에 없는 공연장을 추가할 수 있어요"
+                tailRight="right-2"
+              />
+              <Link
+                href="/venues/new"
+                className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
+              >
+                <span className="text-base leading-none">+</span>
+                공연장 추가
+              </Link>
+            </div>
           </div>
           {!loading && regionChips.length > 0 && (
             <div className="mb-3 flex flex-wrap gap-2">
