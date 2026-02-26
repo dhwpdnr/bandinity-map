@@ -69,6 +69,7 @@ export function VenueMap({ venues, selectedId, onSelectVenue }: VenueMapProps) {
   });
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const [level, setLevel] = useState(8);
+  const mapRef = useRef<kakao.maps.Map | null>(null);
 
   const handleMarkerClick = useCallback(
     (venue: Venue) => {
@@ -80,12 +81,31 @@ export function VenueMap({ venues, selectedId, onSelectVenue }: VenueMapProps) {
   );
 
   // 목록에서 공연장 선택 시 지도를 해당 마커 위치로 이동
+  // 첫 선택 시 props만으로는 중심이 반영되지 않을 수 있어, map 인스턴스로 직접 이동시킴
   useEffect(() => {
     if (!selectedId || venues.length === 0) return;
     const venue = venues.find((v) => v.id === selectedId);
-    if (venue) {
-      setCenter({ lat: venue.lat, lng: venue.lng });
-      setLevel(4);
+    if (!venue) return;
+
+    setCenter({ lat: venue.lat, lng: venue.lng });
+    setLevel(4);
+
+    const moveMapToVenue = (map: kakao.maps.Map) => {
+      if (typeof window === "undefined" || !window.kakao?.maps) return;
+      const pos = new window.kakao.maps.LatLng(venue.lat, venue.lng);
+      map.setCenter(pos);
+      map.setLevel(4);
+    };
+
+    const map = mapRef.current;
+    if (map) {
+      moveMapToVenue(map);
+    } else {
+      // 지도가 아직 생성 중일 수 있음 → 다음 프레임에 한 번 더 시도
+      const id = requestAnimationFrame(() => {
+        if (mapRef.current) moveMapToVenue(mapRef.current!);
+      });
+      return () => cancelAnimationFrame(id);
     }
   }, [selectedId, venues]);
 
@@ -108,10 +128,14 @@ export function VenueMap({ venues, selectedId, onSelectVenue }: VenueMapProps) {
   return (
     <div className="relative h-full min-h-[280px] w-full overflow-hidden rounded-xl">
       <Map
+        ref={mapRef}
         center={center}
         level={level}
         className="h-full w-full"
         isPanto
+        onCreate={(map) => {
+          mapRef.current = map;
+        }}
         onClick={() => onSelectVenue?.(null)}
       >
         <MarkerClusterer
