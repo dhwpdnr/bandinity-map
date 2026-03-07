@@ -80,23 +80,23 @@ export default async function VenueDetailPage({ params }: PageProps) {
         </div>
 
         <div className="mb-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-6">
-          <dl className="space-y-3">
+          <dl className="space-y-4">
             {venue.region && (
-              <div>
-                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">지역</dt>
-                <dd className="text-zinc-900 dark:text-zinc-100">{venue.region}</dd>
+              <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">지역</dt>
+                <dd className="text-sm text-zinc-900 dark:text-zinc-100">{venue.region}</dd>
               </div>
             )}
             {venue.address && (
-              <div>
-                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">주소</dt>
-                <dd className="text-zinc-900 dark:text-zinc-100">{venue.address}</dd>
+              <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">주소</dt>
+                <dd className="text-sm text-zinc-900 dark:text-zinc-100">{venue.address}</dd>
               </div>
             )}
             {venue.phone && (
-              <div>
-                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">연락처</dt>
-                <dd>
+              <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">연락처</dt>
+                <dd className="text-sm">
                   <a
                     href={`tel:${venue.phone}`}
                     className="text-amber-600 hover:underline dark:text-amber-400"
@@ -107,24 +107,24 @@ export default async function VenueDetailPage({ params }: PageProps) {
               </div>
             )}
             {venue.priceInfo && (
-              <div>
-                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">가격 정보</dt>
-                <dd className="whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
+              <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">가격 정보</dt>
+                <dd className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                   {venue.priceInfo}
                 </dd>
               </div>
             )}
             {venue.equipment && (
-              <div>
-                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">장비 정보</dt>
-                <dd className="whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
+              <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">장비 정보</dt>
+                <dd className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                   {venue.equipment}
                 </dd>
               </div>
             )}
             {venue.tags && venue.tags.length > 0 && (
-              <div>
-                <dt className="text-xs font-medium text-zinc-500 dark:text-zinc-400">태그</dt>
+              <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">태그</dt>
                 <dd className="flex flex-wrap gap-2">
                   {venue.tags.map((tag) => (
                     <span
