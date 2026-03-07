@@ -73,14 +73,14 @@ export function VenueReviews({ venueId, initialReviews }: VenueReviewsProps) {
           placeholder="이 공연장에 대한 리뷰를 남겨 주세요."
           rows={3}
           maxLength={1000}
-          className="mb-2 w-full resize-y rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-sm text-zinc-900 placeholder-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-400 dark:focus:border-amber-500 dark:focus:ring-amber-500"
+          className="mb-2 w-full resize-y rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-sm text-zinc-900 placeholder-zinc-500 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
           disabled={submitting}
         />
         {error && <p className="mb-2 text-xs text-red-500 dark:text-red-400">{error}</p>}
         <button
           type="submit"
           disabled={submitting || !text.trim()}
-          className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-amber-600 disabled:opacity-50 dark:bg-amber-600 dark:hover:bg-amber-500"
+          className="rounded-lg bg-primary-400 px-4 py-2 text-sm font-medium text-zinc-950 transition hover:bg-primary-300 disabled:opacity-50"
         >
           {submitting ? "등록 중…" : "리뷰 등록"}
         </button>

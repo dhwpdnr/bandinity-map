@@ -390,7 +390,7 @@ export function VenueForm({ initialData }: VenueFormProps) {
             {form.tags.map((tag) => (
               <span
                 key={tag}
-                className="flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-sm text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                className="flex items-center gap-1 rounded-full bg-primary-400/15 px-3 py-1 text-sm font-medium text-primary-700 dark:bg-primary-400/20 dark:text-primary-300"
               >
                 {tag}
                 <button
@@ -417,7 +417,7 @@ export function VenueForm({ initialData }: VenueFormProps) {
         <button
           type="submit"
           disabled={submitting}
-          className="flex-1 rounded-xl bg-amber-500 py-3 text-sm font-semibold text-white transition hover:bg-amber-600 disabled:opacity-50 dark:bg-amber-600 dark:hover:bg-amber-500"
+          className="flex-1 rounded-xl bg-primary-400 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-primary-300 disabled:opacity-50"
         >
           {submitting ? "저장 중…" : initialData ? "수정 완료" : "공연장 등록"}
         </button>
@@ -434,7 +434,7 @@ export function VenueForm({ initialData }: VenueFormProps) {
 }
 
 const inputCls =
-  "w-full min-w-0 box-border rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500";
+  "w-full min-w-0 box-border rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500";
 
 function Field({
   label,
@@ -449,7 +449,7 @@ function Field({
     <div className="space-y-1">
       <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
         {label}
-        {required && <span className="ml-1 text-amber-500">*</span>}
+        {required && <span className="ml-1 text-primary-500">*</span>}
       </label>
       {children}
     </div>

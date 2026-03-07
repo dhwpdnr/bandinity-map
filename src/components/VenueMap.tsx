@@ -51,7 +51,7 @@ const makePin = (fill: string) =>
   )}`;
 
 const MARKER_PIN_DEFAULT = makePin("#27272a");
-const MARKER_PIN_SELECTED = makePin("#f59e0b");
+const MARKER_PIN_SELECTED = makePin("#64c5da");
 
 const MARKER_SIZE = { width: 30, height: 40 };
 const MARKER_OFFSET = { x: 15, y: 37 };
@@ -187,7 +187,7 @@ export function VenueMap({ venues, selectedId, onSelectVenue }: VenueMapProps) {
                       </p>
                       <Link
                         href={`/venues/${venue.id}`}
-                        className="mt-0.5 block text-xs text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+                        className="mt-0.5 block text-xs text-primary-700 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300"
                         onClick={(e) => e.stopPropagation()}
                       >
                         상세정보 보러가기 →

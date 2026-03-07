@@ -11,6 +11,18 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
+  /* 메인 컬러 #64c5da — primary-400이 브랜드 원색 */
+  --color-primary-50:  #e5f8fb;
+  --color-primary-100: #bfecf5;
+  --color-primary-200: #8edce9;
+  --color-primary-300: #73d2e5;
+  --color-primary-400: #64c5da;
+  --color-primary-500: #4ab1c8;
+  --color-primary-600: #3196ac;
+  --color-primary-700: #1e7b90;
+  --color-primary-800: #135e6e;
+  --color-primary-900: #0b424f;
+
   --animate-fade-in-down: fade-in-down 0.2s ease-out both;
   --animate-fade-out-up: fade-out-up 0.15s ease-in both;
 }

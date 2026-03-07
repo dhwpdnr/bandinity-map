@@ -69,7 +69,7 @@ export default function Home() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="공연장 이름 검색"
-              className="w-full min-w-0 max-w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:focus:border-amber-500 dark:focus:ring-amber-500 md:min-w-[360px] md:max-w-xl"
+              className="w-full min-w-0 max-w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 md:min-w-[360px] md:max-w-xl"
               autoComplete="off"
             />
           </div>
@@ -104,7 +104,7 @@ export default function Home() {
               />
               <Link
                 href="/venues/new"
-                className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
+                className="flex items-center gap-1.5 rounded-lg bg-primary-400 px-3 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-primary-300"
               >
                 <span className="text-base leading-none">+</span>
                 공연장 추가
@@ -120,7 +120,7 @@ export default function Home() {
                   onClick={() => setSelectedRegion(region)}
                   className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
                     selectedRegion === region
-                      ? "bg-amber-500 text-white dark:bg-amber-600"
+                      ? "bg-primary-400 text-zinc-950"
                       : "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600"
                   }`}
                 >

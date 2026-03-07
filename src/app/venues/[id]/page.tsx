@@ -67,7 +67,7 @@ export default async function VenueDetailPage({ params }: PageProps) {
           ) : (
             <Link
               href={`/venues/${venue.id}/edit`}
-              className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-zinc-300 bg-zinc-50 transition hover:border-amber-400 hover:bg-amber-50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-amber-600 dark:hover:bg-amber-900/20"
+              className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-zinc-300 bg-zinc-50 transition hover:border-primary-400 hover:bg-primary-50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-primary-600 dark:hover:bg-primary-900/20"
             >
               <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
                 대표 사진을 추가해 주세요
@@ -83,23 +83,23 @@ export default async function VenueDetailPage({ params }: PageProps) {
           <dl className="space-y-4">
             {venue.region && (
               <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
-                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">지역</dt>
+                <dt className="mb-1 text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">지역</dt>
                 <dd className="text-sm text-zinc-900 dark:text-zinc-100">{venue.region}</dd>
               </div>
             )}
             {venue.address && (
               <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
-                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">주소</dt>
+                <dt className="mb-1 text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">주소</dt>
                 <dd className="text-sm text-zinc-900 dark:text-zinc-100">{venue.address}</dd>
               </div>
             )}
             {venue.phone && (
               <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
-                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">연락처</dt>
+                <dt className="mb-1 text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">연락처</dt>
                 <dd className="text-sm">
                   <a
                     href={`tel:${venue.phone}`}
-                    className="text-amber-600 hover:underline dark:text-amber-400"
+                    className="text-primary-700 hover:underline dark:text-primary-400"
                   >
                     {venue.phone}
                   </a>
@@ -108,7 +108,7 @@ export default async function VenueDetailPage({ params }: PageProps) {
             )}
             {venue.priceInfo && (
               <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
-                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">가격 정보</dt>
+                <dt className="mb-1 text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">가격 정보</dt>
                 <dd className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                   {venue.priceInfo}
                 </dd>
@@ -116,7 +116,7 @@ export default async function VenueDetailPage({ params }: PageProps) {
             )}
             {venue.equipment && (
               <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
-                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">장비 정보</dt>
+                <dt className="mb-1 text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">장비 정보</dt>
                 <dd className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                   {venue.equipment}
                 </dd>
@@ -124,12 +124,12 @@ export default async function VenueDetailPage({ params }: PageProps) {
             )}
             {venue.tags && venue.tags.length > 0 && (
               <div className="border-b border-zinc-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
-                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">태그</dt>
+                <dt className="mb-1 text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">태그</dt>
                 <dd className="flex flex-wrap gap-2">
                   {venue.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-amber-100 px-3 py-1 text-sm text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                      className="rounded-full bg-primary-400/15 px-3 py-1 text-sm font-medium text-primary-700 dark:bg-primary-400/20 dark:text-primary-300"
                     >
                       {tag}
                     </span>
@@ -143,7 +143,7 @@ export default async function VenueDetailPage({ params }: PageProps) {
                   href={venue.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary-400 px-4 py-2 text-sm font-medium text-zinc-950 hover:bg-primary-300"
                 >
                   예약/홈페이지 →
                 </a>

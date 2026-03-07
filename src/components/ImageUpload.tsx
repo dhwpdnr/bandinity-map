@@ -108,19 +108,19 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
           className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 py-8 transition
             ${
               uploading
-                ? "border-amber-300 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/20"
-                : "border-zinc-300 bg-zinc-50 hover:border-amber-400 hover:bg-amber-50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-amber-600 dark:hover:bg-amber-900/20"
+                ? "border-primary-300 bg-primary-50 dark:border-primary-700 dark:bg-primary-900/20"
+                : "border-zinc-300 bg-zinc-50 hover:border-primary-400 hover:bg-primary-50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-primary-600 dark:hover:bg-primary-900/20"
             }`}
         >
           {uploading ? (
             <>
               <div className="h-1.5 w-full max-w-[180px] overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
                 <div
-                  className="h-full rounded-full bg-amber-500 transition-all duration-200"
+                  className="h-full rounded-full bg-primary-400 transition-all duration-200"
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <span className="text-sm text-amber-600 dark:text-amber-400">
+              <span className="text-sm text-primary-700 dark:text-primary-400">
                 업로드 중… {progress}%
               </span>
             </>
