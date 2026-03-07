@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getVenueById } from "@/lib/venues";
+import { getVenueReviews } from "@/lib/reviews";
 import { VenueMap } from "@/components/VenueMap";
 import { VenueGallery } from "@/components/VenueGallery";
+import { VenueReviews } from "@/components/VenueReviews";
 import { Logo } from "@/components/Logo";
 import { CoachingMark } from "@/components/CoachingMark";
 
@@ -14,6 +16,13 @@ export default async function VenueDetailPage({ params }: PageProps) {
   const { id } = await params;
   const venue = await getVenueById(id);
   if (!venue) notFound();
+
+  let reviews: Awaited<ReturnType<typeof getVenueReviews>> = [];
+  try {
+    reviews = await getVenueReviews(id);
+  } catch {
+    // Firestore 규칙 미배포 등으로 리뷰 조회 실패 시 빈 목록으로 표시 (페이지는 정상 로드)
+  }
 
   return (
     <div className="flex min-h-dvh flex-col bg-zinc-50 dark:bg-zinc-950">
@@ -147,6 +156,9 @@ export default async function VenueDetailPage({ params }: PageProps) {
         <div className="mb-6">
           <VenueGallery venueId={venue.id} photos={venue.photos ?? []} />
         </div>
+
+        {/* 리뷰 */}
+        <VenueReviews venueId={venue.id} initialReviews={reviews} />
 
         {/* 지도 (최하단) */}
         <div className="h-[220px] w-full overflow-hidden rounded-xl sm:h-[280px]">
