@@ -203,9 +203,9 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
   }
 
   return (
-    <div className="h-dvh overflow-hidden bg-[#36363a] px-2 py-2.5 text-white sm:min-h-dvh sm:h-auto sm:px-4 sm:py-4 lg:px-6 lg:py-6">
-      <div className="mx-auto flex h-full max-w-[420px] flex-col overflow-hidden rounded-[24px] border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(44,48,62,0.34),_transparent_30%),linear-gradient(180deg,#06080d_0%,#020409_100%)] shadow-[0_30px_90px_-52px_rgba(0,0,0,0.92)] sm:h-auto sm:max-w-[760px] sm:rounded-[30px] lg:max-w-[1280px] lg:rounded-[34px]">
-        <header className="border-b border-white/10 px-3.5 sm:px-6 lg:px-8">
+    <div className="h-dvh overflow-hidden bg-[#020409] text-white sm:min-h-dvh sm:h-auto sm:bg-[#36363a] sm:px-4 sm:py-4 lg:px-6 lg:py-6">
+      <div className="flex h-full flex-col overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(44,48,62,0.34),_transparent_30%),linear-gradient(180deg,#06080d_0%,#020409_100%)] sm:mx-auto sm:h-auto sm:max-w-[760px] sm:rounded-[30px] sm:border sm:border-white/10 sm:shadow-[0_30px_90px_-52px_rgba(0,0,0,0.92)] lg:max-w-[1280px] lg:rounded-[34px]">
+        <header className="border-b border-white/10 px-4 sm:px-6 lg:px-8">
           <div className="flex min-h-[60px] items-center gap-2.5 sm:min-h-[64px] sm:gap-4 lg:min-h-[68px] lg:gap-6">
             <div className="shrink-0">
               <Logo />
@@ -227,9 +227,9 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
 
         <main
           ref={mainCanvasRef}
-          className="relative flex-1 overflow-hidden px-3.5 py-3 sm:block sm:px-6 sm:py-5 lg:grid lg:grid-cols-[minmax(0,1.1fr)_380px] lg:gap-6 lg:px-8 lg:py-6"
+          className="relative flex-1 overflow-hidden sm:block sm:px-6 sm:py-5 lg:grid lg:grid-cols-[minmax(0,1.1fr)_380px] lg:gap-6 lg:px-8 lg:py-6"
         >
-          <section className="absolute inset-3 sm:static sm:sticky sm:top-4 sm:h-[35vh] sm:min-h-[300px] lg:top-6 lg:h-[calc(100dvh-220px)] lg:min-h-[520px]">
+          <section className="absolute inset-0 sm:static sm:sticky sm:top-4 sm:h-[35vh] sm:min-h-[300px] lg:top-6 lg:h-[calc(100dvh-220px)] lg:min-h-[520px]">
             <PlaceMap
               places={filteredPlaces}
               fitPlaces={viewportPlaces}
@@ -242,7 +242,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
           </section>
 
           <aside
-            className="absolute inset-x-3 bottom-3 z-10 flex h-[72%] flex-col overflow-hidden rounded-[24px] border border-white/8 bg-[linear-gradient(180deg,rgba(8,10,16,0.97),rgba(4,6,10,0.995))] shadow-[0_-28px_64px_-36px_rgba(0,0,0,0.98)] sm:static sm:mt-4 sm:block sm:h-auto sm:overflow-visible sm:rounded-[24px] sm:px-4 sm:py-4 sm:shadow-none lg:mt-0 lg:rounded-[28px] lg:px-4 lg:pb-4 lg:pt-4"
+            className="absolute inset-x-0 bottom-0 z-10 flex h-[72%] flex-col overflow-hidden rounded-t-[24px] border-x-0 border-t border-white/8 bg-[linear-gradient(180deg,rgba(8,10,16,0.97),rgba(4,6,10,0.995))] shadow-[0_-28px_64px_-36px_rgba(0,0,0,0.98)] sm:static sm:mt-4 sm:block sm:h-auto sm:overflow-visible sm:rounded-[24px] sm:border sm:border-white/8 sm:px-4 sm:py-4 sm:shadow-none lg:mt-0 lg:rounded-[28px] lg:px-4 lg:pb-4 lg:pt-4"
             style={
               isMobileViewport && mobileCanvasHeight > 0
                 ? {
@@ -258,12 +258,12 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
             <div
               role="presentation"
               onPointerDown={handleMobileSheetPointerDown}
-              className="touch-none px-3 pt-4 sm:hidden"
+              className="touch-none px-4 pt-4 sm:hidden"
             >
               <div className="mx-auto mb-2.5 h-1 w-10 rounded-full bg-white/12" />
             </div>
 
-            <div className="flex min-h-0 flex-1 flex-col px-3 pb-3 sm:block sm:px-0 sm:pb-0">
+            <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 sm:block sm:px-0 sm:pb-0">
               <div className="relative mb-3 flex items-center justify-between gap-3 sm:mb-5" ref={regionMenuRef}>
                 <div className="flex min-w-0 items-center gap-2">
                   <h2 className="min-w-0 text-[15px] font-semibold tracking-[-0.03em] text-zinc-300 sm:text-lg lg:text-[1.2rem]">
