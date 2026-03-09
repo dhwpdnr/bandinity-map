@@ -5,5 +5,5 @@ export interface VenueReview {
   venueId: string;
   /** 리뷰 내용 */
   text: string;
-  createdAt?: { seconds: number };
+  createdAt?: string;
 }
