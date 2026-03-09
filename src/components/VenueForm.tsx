@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Place } from "@/types/place";
 import { CoverImageUploadField } from "@/components/CoverImageUploadField";
 import { VenueAddressField } from "@/components/VenueAddressField";
+import { VenueRegionField } from "@/components/VenueRegionField";
 
 interface VenueFormProps {
   action: (formData: FormData) => void | Promise<void>;
@@ -109,18 +110,11 @@ export function VenueForm({
             <span className={fieldLabelClass}>
               지역 *
             </span>
-            <select
-              name="region"
-              required
-              defaultValue={initialPlace?.region ?? "홍대"}
-              className={fieldClass}
-            >
-              {resolvedRegionOptions.map((region) => (
-                <option key={region} value={region}>
-                  {region}
-                </option>
-              ))}
-            </select>
+            <VenueRegionField
+              options={resolvedRegionOptions}
+              initialRegion={initialPlace?.region ?? resolvedRegionOptions[0]}
+              fieldClass={fieldClass}
+            />
           </label>
 
           <label className="space-y-2">
