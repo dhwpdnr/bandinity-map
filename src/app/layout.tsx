@@ -14,9 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bandinity | 가용성 중심 공연장·합주실 탐색",
+  title: "Bandinity | 공연장 지도",
   description:
     "날짜 단위 가용성과 검증 상태를 기준으로 공연장과 합주실을 탐색하세요.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
