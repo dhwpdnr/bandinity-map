@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "공연장 지도 | 라이브홀 찾기",
-  description: "지도에서 공연장·합주실·라이브홀을 한눈에 찾아보세요.",
+  title: "Bandinity | 가용성 중심 공연장·합주실 탐색",
+  description:
+    "날짜 단위 가용성과 검증 상태를 기준으로 공연장과 합주실을 탐색하세요.",
 };
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-dvh antialiased`}
       >
         {children}
         <Analytics />
