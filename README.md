@@ -1,84 +1,61 @@
-# 공연장 지도 (Bandinity Map)
+# Bandinity
 
-지도를 메인으로 두고, 카카오 지도 위에 공연장·합주실·라이브홀을 표시합니다.
+가용성 중심으로 공연장과 합주실을 탐색하는 Next.js 앱입니다. 현재 Firestore 구조는
+`venues` 컬렉션과 `venues/{id}/reviews` 서브컬렉션을 기준으로 동작합니다.
 
-## 기능
+## 현재 기능
 
-- **지도 메인**: 카카오 지도에 공연장 마커 표시, 클릭 시 해당 위치로 이동 및 상세 링크
-- **공연장 목록**: 지역 필터, 목록에서 선택 시 지도와 연동
-- **공연장 상세**: 주소, 연락처, 소개, 예약 링크
-- **반응형**: 모바일 우선, 웹에서도 깔끔하게 보이도록 구성
+- `venues` 중심 공개 탐색
+  - 날짜 기준 가용성 필터
+  - 지역 / 유형 / 태그 / 검증 상태 필터
+  - 지도 + 리스트 분할 UI
+- 장소 상세
+  - 가용성 캘린더
+  - 출처 / 검증 상태 / 최근 업데이트 표시
+  - 공개 사진 / 리뷰 조회
+- 장소 등록 / 수정
+  - `/venues/new` 직접 등록
+  - `/venues/[id]/edit` 직접 수정
+- 리뷰 작성
+  - `venues/{id}/reviews` 직접 등록
 
 ## 기술 스택
 
-- **Next.js 16** (App Router, TypeScript)
-- **Tailwind CSS**
-- **카카오 지도** (react-kakao-maps-sdk)
-- **Firebase Firestore** (공연장 데이터)
+- Next.js 16 App Router
+- React 19
+- Tailwind CSS 4
+- Kakao Map
+- Firebase Firestore
 
-## 시작하기
+## 환경 변수
 
-### 1. 환경 변수
+기본 클라이언트 설정은 [.env.local.example](/Users/jetproc/jetproc/Bandinity/web_project/bandinity-map/.env.local.example)에 정리되어 있습니다.
 
-`.env.local.example`을 복사해 `.env.local`을 만들고 값을 채웁니다.
+필수 범주:
 
-```bash
-cp .env.local.example .env.local
-```
+- 공개 앱
+  - `NEXT_PUBLIC_KAKAO_APP_KEY`
+  - `NEXT_PUBLIC_FIREBASE_*`
 
-- **카카오 지도**: [Kakao Developers](https://developers.kakao.com/)에서 앱 생성 후 **JavaScript 키**를 발급받아 `NEXT_PUBLIC_KAKAO_APP_KEY`에 넣습니다.
-- **Firebase**: [Firebase Console](https://console.firebase.google.com/)에서 프로젝트 생성 후, 프로젝트 설정 > 일반 > 앱에서 웹 앱 설정 시 나오는 `firebaseConfig` 값을 각 `NEXT_PUBLIC_FIREBASE_*` 변수에 넣습니다.
-
-### 2. Firestore 컬렉션
-
-Firestore에 `venues` 컬렉션을 만들고, 아래 필드로 문서를 추가합니다.
-
-| 필드        | 타입   | 필수 | 설명                        |
-| ----------- | ------ | ---- | --------------------------- |
-| name        | string | O    | 공연장 이름                 |
-| address     | string | O    | 주소                        |
-| lat         | number | O    | 위도                        |
-| lng         | number | O    | 경도                        |
-| region      | string | O    | 지역 (예: 서울)             |
-| phone       | string |      | 연락처                      |
-| description | string |      | 소개                        |
-| imageUrl    | string |      | 대표 이미지 URL             |
-| link        | string |      | 예약/홈페이지 URL           |
-| tags        | array  |      | 태그 (예: 합주실, 라이브홀) |
-
-Firestore에서 **인덱스**가 필요할 수 있습니다. `venues` 컬렉션에 `name` 오름차순 정렬을 사용하므로, 첫 쿼리 시 콘솔에 나오는 인덱스 생성 링크를 통해 복합 인덱스를 만들어 주세요.
-
-### 3. 실행
+## 실행
 
 ```bash
 npm install
 npm run dev
 ```
 
-브라우저에서 [http://localhost:3000](http://localhost:3000) 으로 접속합니다.
+검증:
 
-## 프로젝트 구조
-
-```
-src/
-├── app/
-│   ├── layout.tsx      # 루트 레이아웃
-│   ├── page.tsx        # 메인 (지도 + 목록)
-│   └── venues/[id]/    # 공연장 상세
-├── components/
-│   ├── VenueMap.tsx    # 카카오 지도 + 마커
-│   ├── VenueList.tsx   # 공연장 목록
-│   └── VenueCard.tsx   # 공연장 카드
-├── lib/
-│   ├── firebase.ts     # Firebase 초기화
-│   └── venues.ts       # Firestore 조회
-└── types/
-    └── venue.ts        # 공연장 타입
+```bash
+npm run lint
+npm run test
+npm run build
 ```
 
-## 참고
+## 주요 경로
 
-- [카카오 지도 API](https://apis.map.kakao.com/web/)
-- [react-kakao-maps-sdk](https://react-kakao-maps-sdk.jaeseokim.dev/)
-
-Made by cursor
+- `/` 공개 탐색
+- `/places/[id]` 장소 상세
+- `/venues/new` 장소 등록
+- `/venues/[id]/edit` 장소 수정
+- `/submit` 기존 링크 호환용 리다이렉트
