@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { updateVenueAction } from "@/app/actions";
 import { SiteHeader } from "@/components/SiteHeader";
 import { VenueForm } from "@/components/VenueForm";
+import { CARD_PADDING, CARD_RADIUS, PAGE_BG_GRADIENT, PAGE_MAX_WIDTH, PAGE_PADDING } from "@/lib/layout";
 import { getPlaceById } from "@/lib/places";
 
 interface LegacyVenueEditPageProps {
@@ -24,9 +25,9 @@ export default async function LegacyVenueEditPage({
   const error = Array.isArray(query.error) ? query.error[0] : query.error;
 
   return (
-    <main className="min-h-dvh bg-zinc-50 dark:bg-zinc-950">
-      <SiteHeader className="border-b border-zinc-200/80 bg-white/85 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/80" containerClassName="max-w-6xl" />
-      <div className="mx-auto max-w-6xl space-y-4 px-3 py-5 md:px-4 md:py-6">
+    <main className={PAGE_BG_GRADIENT}>
+      <SiteHeader className="border-b border-zinc-200/80 bg-white/85 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/80" containerClassName={PAGE_MAX_WIDTH} />
+      <div className={`mx-auto space-y-4 ${PAGE_MAX_WIDTH} ${PAGE_PADDING}`}>
         <div>
           <Link
             href={`/places/${place.id}`}
@@ -37,7 +38,7 @@ export default async function LegacyVenueEditPage({
           </Link>
         </div>
 
-        <section className="rounded-[32px] border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:p-6">
+        <section className={`${CARD_RADIUS} border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${CARD_PADDING}`}>
           <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
             장소 정보 수정
           </h1>

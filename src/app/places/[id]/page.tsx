@@ -7,6 +7,7 @@ import { OneTimeCoachBubble } from "@/components/OneTimeCoachBubble";
 import { PlaceMap } from "@/components/PlaceMap";
 import { PlaceReviewsReadOnly } from "@/components/PlaceReviewsReadOnly";
 import { SiteHeader } from "@/components/SiteHeader";
+import { CARD_PADDING, HEADER_PADDING, PAGE_BG_GRADIENT, PAGE_MAX_WIDTH, PAGE_PADDING } from "@/lib/layout";
 import { hasPublicFirestoreConfig } from "@/lib/public-env";
 import { getPlaceById } from "@/lib/places";
 import { getPlaceReviews } from "@/lib/reviews";
@@ -34,7 +35,7 @@ function DetailRow({
   value: ReactNode;
 }) {
   return (
-    <section className="px-5 py-4 sm:px-6">
+    <section className={CARD_PADDING}>
       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
         {label}
       </p>
@@ -51,9 +52,11 @@ export default async function PlaceDetailPage({
 }: PlaceDetailPageProps) {
   if (!hasPublicFirestoreConfig()) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-zinc-50 px-6 py-12 dark:bg-zinc-950">
-        <div className="rounded-[32px] border border-zinc-200 bg-white p-8 text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          Firebase 설정 후 상세 페이지를 확인할 수 있습니다.
+      <main className={`flex ${PAGE_BG_GRADIENT} items-center justify-center py-12`}>
+        <div className={`mx-auto w-full ${PAGE_MAX_WIDTH} ${HEADER_PADDING}`}>
+          <div className={`${CARD_RADIUS} border border-zinc-200 bg-white text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${CARD_PADDING}`}>
+            Firebase 설정 후 상세 페이지를 확인할 수 있습니다.
+          </div>
         </div>
       </main>
     );
@@ -84,10 +87,10 @@ export default async function PlaceDetailPage({
   const galleryMedia = media.filter((imageUrl) => imageUrl !== coverImage);
 
   return (
-    <div className="min-h-dvh bg-[radial-gradient(circle_at_top_left,_rgba(100,197,218,0.14),_transparent_28%),linear-gradient(180deg,_rgba(244,247,249,1)_0%,_rgba(255,255,255,1)_52%,_rgba(244,247,249,1)_100%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(100,197,218,0.12),_transparent_28%),linear-gradient(180deg,_rgba(10,10,10,1)_0%,_rgba(17,24,39,1)_52%,_rgba(10,10,10,1)_100%)]">
-      <SiteHeader className="sticky top-0 z-20 border-b border-white/60 bg-white/80 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/75" containerClassName="max-w-6xl" />
+    <div className={PAGE_BG_GRADIENT}>
+      <SiteHeader className="sticky top-0 z-20 border-b border-white/60 bg-white/80 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/75" containerClassName={PAGE_MAX_WIDTH} />
 
-      <main className="mx-auto max-w-4xl space-y-3 px-4 py-5 md:px-6 md:py-7">
+      <main className={`mx-auto space-y-3 ${PAGE_MAX_WIDTH} ${PAGE_PADDING}`}>
         {(success || review || reviewError) && (
           <div className="space-y-3">
             {success && (
@@ -163,7 +166,7 @@ export default async function PlaceDetailPage({
             </Link>
           )}
 
-          <div className="border-b border-zinc-200/80 px-5 py-5 dark:border-zinc-800/80 sm:px-6">
+          <div className={`border-b border-zinc-200/80 dark:border-zinc-800/80 ${CARD_PADDING}`}>
             <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-[2.2rem]">
               {place.name}
             </h1>
@@ -203,7 +206,7 @@ export default async function PlaceDetailPage({
               emptyText="아직 등록되지 않았습니다."
             />
 
-            <section className="px-5 py-4 sm:px-6">
+            <section className={CARD_PADDING}>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
                 사진 갤러리
               </p>
@@ -245,7 +248,7 @@ export default async function PlaceDetailPage({
               embedded
             />
 
-            <section className="px-5 py-4 sm:px-6">
+            <section className={CARD_PADDING}>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
                 위치 지도
               </p>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createVenueAction } from "@/app/actions";
 import { SiteHeader } from "@/components/SiteHeader";
 import { VenueForm } from "@/components/VenueForm";
+import { CARD_PADDING, CARD_RADIUS, PAGE_BG_GRADIENT, PAGE_MAX_WIDTH, PAGE_PADDING } from "@/lib/layout";
 import { getPlaces } from "@/lib/places";
 
 interface VenueNewPageProps {
@@ -18,9 +19,9 @@ export default async function VenueNewPage({ searchParams }: VenueNewPageProps) 
   ).sort((left, right) => left.localeCompare(right, "ko"));
 
   return (
-    <main className="min-h-dvh bg-zinc-50 dark:bg-zinc-950">
-      <SiteHeader className="border-b border-zinc-200/80 bg-white/85 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/80" containerClassName="max-w-6xl" />
-      <div className="mx-auto max-w-7xl space-y-3 px-2 py-4 md:px-3 md:py-5">
+    <main className={PAGE_BG_GRADIENT}>
+      <SiteHeader className="border-b border-zinc-200/80 bg-white/85 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/80" containerClassName={PAGE_MAX_WIDTH} />
+      <div className={`mx-auto space-y-3 ${PAGE_MAX_WIDTH} ${PAGE_PADDING}`}>
         <div>
           <Link
             href="/"
@@ -41,7 +42,7 @@ export default async function VenueNewPage({ searchParams }: VenueNewPageProps) 
           </div>
         </div>
 
-        <section className="rounded-[28px] border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:p-5">
+        <section className={`${CARD_RADIUS} border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${CARD_PADDING}`}>
           <h1 className="text-[1.75rem] font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 md:text-[1.9rem]">
             새 공연장 등록
           </h1>

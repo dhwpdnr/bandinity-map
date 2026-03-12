@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { getTodayDateString } from "@/lib/dates";
+import { HEADER_PADDING, PAGE_MAX_WIDTH } from "@/lib/layout";
 import {
   getRegionsByCount,
   sortPlacesByIntent,
@@ -31,6 +32,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
   const [selectedRegion, setSelectedRegion] = useState("전체");
   const [showRegionMenu, setShowRegionMenu] = useState(false);
   const [mobileCanvasHeight, setMobileCanvasHeight] = useState(0);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [mobileSheetSnap, setMobileSheetSnap] = useState<"collapsed" | "expanded">(
     "collapsed"
   );
@@ -56,8 +58,6 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
   const mobileSheetTranslate =
     mobileDragTranslate ??
     (mobileSheetSnap === "expanded" ? expandedTranslate : collapsedTranslate);
-  const isMobileViewport =
-    typeof window !== "undefined" ? window.innerWidth < 640 : false;
 
   function clampSheetTranslate(value: number) {
     return Math.min(collapsedTranslate, Math.max(expandedTranslate, value));
@@ -110,22 +110,22 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
     };
   }, [showRegionMenu]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window === "undefined" || !mainCanvasRef.current) {
       return;
     }
 
     const node = mainCanvasRef.current;
     const measure = () => {
-      window.requestAnimationFrame(() => {
-        setMobileCanvasHeight(node.getBoundingClientRect().height);
-      });
+      const height = node.getBoundingClientRect().height;
+      setMobileCanvasHeight(height);
+      setIsMobileViewport(window.innerWidth < 640);
     };
 
     measure();
 
     const resizeObserver = new window.ResizeObserver(() => {
-      measure();
+      window.requestAnimationFrame(measure);
     });
 
     resizeObserver.observe(node);
@@ -172,7 +172,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
   function handleSelectPlace(place: Place | null) {
     setSelectedId(place?.id ?? null);
 
-    if (typeof window !== "undefined" && window.innerWidth < 640) {
+    if (isMobileViewport) {
       setMobileSheetSnap("expanded");
     }
   }
@@ -180,7 +180,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
   function handleMobileSheetPointerDown(
     event: React.PointerEvent<HTMLDivElement>
   ) {
-    if (typeof window === "undefined" || window.innerWidth >= 640) {
+    if (!isMobileViewport) {
       return;
     }
 
@@ -223,16 +223,17 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
   }
 
   return (
-    <div className="h-dvh overflow-hidden bg-[#020409] text-white sm:min-h-dvh sm:h-auto sm:bg-[#36363a] sm:px-4 sm:py-4 lg:px-6 lg:py-6">
-      <div className="flex h-full flex-col overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(44,48,62,0.34),_transparent_30%),linear-gradient(180deg,#06080d_0%,#020409_100%)] sm:mx-auto sm:h-auto sm:max-w-[760px] sm:rounded-[30px] sm:border sm:border-white/10 sm:shadow-[0_30px_90px_-52px_rgba(0,0,0,0.92)] lg:max-w-[1280px] lg:rounded-[34px]">
-        <header className="border-b border-white/10 px-4 sm:px-6 lg:px-8">
-          <div className="flex min-h-[60px] items-center gap-2.5 sm:min-h-[64px] sm:gap-4 lg:min-h-[68px] lg:gap-6">
-            <div className="shrink-0">
-              <Logo />
-            </div>
+    <div className="h-dvh overflow-hidden bg-[#020409] text-white sm:min-h-dvh sm:h-auto sm:bg-[#06080d]">
+      <div className="flex h-full w-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(44,48,62,0.34),_transparent_30%),linear-gradient(180deg,#06080d_0%,#020409_100%)] sm:h-auto sm:rounded-none sm:border-0 sm:shadow-none">
+        <header className="border-b border-white/10">
+          <div className={`mx-auto ${PAGE_MAX_WIDTH} ${HEADER_PADDING}`}>
+            <div className="flex min-h-[60px] items-center gap-2.5 sm:min-h-[64px] sm:gap-4 lg:min-h-[68px] lg:gap-6">
+              <div className="shrink-0">
+                <Logo />
+              </div>
 
-            <div className="relative min-w-0 flex-1">
-              <div className="flex overflow-hidden rounded-[16px] border border-white/12 bg-[linear-gradient(90deg,rgba(29,31,40,0.98),rgba(41,43,53,0.9))] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_14px_28px_-24px_rgba(0,0,0,0.95)] sm:rounded-[20px] lg:rounded-[22px]">
+              <div className="relative min-w-0 flex-1">
+                <div className="flex overflow-hidden rounded-[16px] border border-white/12 bg-[linear-gradient(90deg,rgba(29,31,40,0.98),rgba(41,43,53,0.9))] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_14px_28px_-24px_rgba(0,0,0,0.95)] sm:rounded-[20px] lg:rounded-[22px]">
                 <input
                   type="search"
                   value={searchQuery}
@@ -240,6 +241,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
                   placeholder="공연장 이름 검색"
                   className="min-w-0 flex-1 bg-transparent px-3.5 py-2 text-[13px] text-white outline-none placeholder:text-zinc-500 sm:px-5 sm:py-2.5 sm:text-[15px] lg:px-6 lg:py-3 lg:text-base"
                 />
+                </div>
               </div>
             </div>
           </div>
@@ -280,22 +282,24 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
               fitPlaces={viewportPlaces}
               selectedId={activeSelectedId}
               onSelectPlace={handleSelectPlace}
-              countLabel={`${filteredPlaces.length}개 공연장`}
               resultsFocusOffset="upper"
               resultsFitToken={selectedRegion}
             />
           </section>
 
           <aside
-            className="absolute inset-x-0 bottom-0 z-10 flex h-[72%] flex-col overflow-hidden rounded-t-[24px] border-x-0 border-t border-white/8 bg-[linear-gradient(180deg,rgba(8,10,16,0.97),rgba(4,6,10,0.995))] shadow-[0_-28px_64px_-36px_rgba(0,0,0,0.98)] sm:static sm:mt-4 sm:block sm:h-auto sm:overflow-visible sm:rounded-[24px] sm:border sm:border-white/8 sm:px-4 sm:py-4 sm:shadow-none lg:mt-0 lg:rounded-[28px] lg:px-4 lg:pb-4 lg:pt-4"
+            className="absolute inset-x-0 bottom-0 z-10 flex min-h-[45dvh] flex-col overflow-hidden rounded-t-[24px] border-x-0 border-t border-white/8 bg-[linear-gradient(180deg,rgba(8,10,16,0.97),rgba(4,6,10,0.995))] shadow-[0_-28px_64px_-36px_rgba(0,0,0,0.98)] sm:static sm:mt-4 sm:block sm:h-auto sm:min-h-0 sm:overflow-visible sm:rounded-[24px] sm:border sm:border-white/8 sm:px-4 sm:py-4 sm:shadow-none lg:mt-0 lg:rounded-[28px] lg:px-4 lg:pb-4 lg:pt-4"
             style={
-              isMobileViewport && mobileCanvasHeight > 0
+              isMobileViewport
                 ? {
-                    transform: `translateY(${mobileSheetTranslate}px)`,
-                    transition:
-                      mobileDragTranslate === null
-                        ? "transform 240ms cubic-bezier(0.22, 1, 0.36, 1)"
-                        : "none",
+                    height: mobileCanvasHeight > 0 ? `${mobileCanvasHeight * 0.72}px` : "72%",
+                    ...(mobileCanvasHeight > 0 && {
+                      transform: `translateY(${mobileSheetTranslate}px)`,
+                      transition:
+                        mobileDragTranslate === null
+                          ? "transform 240ms cubic-bezier(0.22, 1, 0.36, 1)"
+                          : "none",
+                    }),
                   }
                 : undefined
             }
@@ -303,9 +307,10 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
             <div
               role="presentation"
               onPointerDown={handleMobileSheetPointerDown}
-              className="touch-none px-4 pt-4 sm:hidden"
+              className="touch-none flex min-h-[44px] shrink-0 cursor-grab touch-manipulation items-center justify-center px-4 pt-4 pb-1 active:cursor-grabbing sm:hidden"
+              style={{ WebkitTouchCallout: "none" }}
             >
-              <div className="mx-auto mb-2.5 h-1 w-10 rounded-full bg-white/12" />
+              <div className="mx-auto h-1 w-10 shrink-0 rounded-full bg-white/12" aria-hidden />
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 sm:block sm:px-0 sm:pb-0">

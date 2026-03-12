@@ -42,18 +42,21 @@ function getPopupMetrics() {
   return { width: 240, height: 82, gap: 10, margin: 14, compact: false };
 }
 
+const SERVER_SAFE_POPUP_METRICS = { width: 240, height: 82, gap: 10, margin: 14, compact: false };
+
 function PopupContent({
   place,
   offsetX,
   offsetY,
   popupRef,
+  metrics,
 }: {
   place: Place;
   offsetX: number;
   offsetY: number;
   popupRef: RefObject<HTMLDivElement | null>;
+  metrics: { width: number; height: number; gap: number; margin: number; compact: boolean };
 }) {
-  const metrics = getPopupMetrics();
   return (
     <div
       className='will-change-transform'
@@ -128,14 +131,13 @@ interface PlaceMapProps {
   fitPlaces?: Place[];
   selectedId?: string | null;
   onSelectPlace?: (place: Place | null) => void;
-  countLabel?: string;
   selectedFocusOffset?: 'list' | 'centered';
   showSelectedOverlay?: boolean;
   resultsFocusOffset?: 'centered' | 'upper';
   resultsFitToken?: string;
 }
 
-export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, countLabel, selectedFocusOffset = 'list', showSelectedOverlay = true, resultsFocusOffset = 'centered', resultsFitToken = 'default' }: PlaceMapProps) {
+export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, selectedFocusOffset = 'list', showSelectedOverlay = true, resultsFocusOffset = 'centered', resultsFitToken = 'default' }: PlaceMapProps) {
   const [loading, error] = useKakaoLoader({
     appkey: publicEnv.kakaoAppKey,
     libraries: ['services', 'clusterer'],
@@ -145,6 +147,7 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, countLa
     level: DEFAULT_LEVEL,
   });
   const [popupOffsets, setPopupOffsets] = useState({ offsetX: -73, offsetY: -70 });
+  const [popupMetrics, setPopupMetrics] = useState(SERVER_SAFE_POPUP_METRICS);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -153,6 +156,10 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, countLa
     ? places.filter((place) => place.id !== selectedPlace.id)
     : places;
   const viewportPlaces = fitPlaces ?? places;
+
+  useEffect(() => {
+    setPopupMetrics(getPopupMetrics());
+  }, []);
 
   useEffect(() => {
     if (!selectedPlace || !mapRef.current || typeof window === 'undefined') {
@@ -317,12 +324,6 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, countLa
 
   return (
     <div ref={containerRef} className='relative h-full min-h-[240px] overflow-hidden rounded-[20px] border border-white/10 bg-[#0c0f14] p-1.5 shadow-[0_24px_72px_-48px_rgba(0,0,0,0.85)] sm:min-h-[320px] sm:rounded-[28px] sm:p-3 lg:rounded-[30px]'>
-      {countLabel && (
-        <div className='pointer-events-none absolute bottom-4 left-3.5 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-[linear-gradient(180deg,rgba(33,36,46,0.96),rgba(18,20,28,0.96))] px-1 text-center text-[9px] font-semibold leading-tight text-white shadow-[0_18px_36px_-24px_rgba(0,0,0,0.9)] ring-1 ring-white/10 sm:bottom-6 sm:left-5 sm:h-[74px] sm:w-[74px] sm:text-[11px] lg:bottom-7 lg:left-6 lg:h-[82px] lg:w-[82px] lg:text-xs'>
-          {countLabel}
-        </div>
-      )}
-
       <Map
         center={center}
         level={level}
@@ -410,6 +411,7 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, countLa
               offsetX={popupOffsets.offsetX}
               offsetY={popupOffsets.offsetY}
               popupRef={popupRef}
+              metrics={popupMetrics}
             />
           </CustomOverlayMap>
         )}
