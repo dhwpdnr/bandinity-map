@@ -7,7 +7,7 @@ import { OneTimeCoachBubble } from "@/components/OneTimeCoachBubble";
 import { PlaceMap } from "@/components/PlaceMap";
 import { PlaceReviewsReadOnly } from "@/components/PlaceReviewsReadOnly";
 import { SiteHeader } from "@/components/SiteHeader";
-import { CARD_PADDING, HEADER_PADDING, PAGE_BG_GRADIENT, PAGE_MAX_WIDTH, PAGE_PADDING } from "@/lib/layout";
+import { CARD_PADDING, CARD_RADIUS, HEADER_PADDING, PAGE_BG_GRADIENT, PAGE_MAX_WIDTH, PAGE_PADDING } from "@/lib/layout";
 import { hasPublicFirestoreConfig } from "@/lib/public-env";
 import { getPlaceById } from "@/lib/places";
 import { getPlaceReviews } from "@/lib/reviews";
