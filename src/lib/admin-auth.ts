@@ -61,11 +61,21 @@ export async function requireAdminSession(): Promise<void> {
   }
 }
 
+/** 타이밍 공격 완화: 해시 후 상수 시간 비교 */
+function constantTimeEqual(a: string, b: string): boolean {
+  const hashA = crypto.createHash("sha256").update(a, "utf8").digest();
+  const hashB = crypto.createHash("sha256").update(b, "utf8").digest();
+  if (hashA.length !== hashB.length) return false;
+  return crypto.timingSafeEqual(hashA, hashB);
+}
+
 export async function createAdminSession(password: string): Promise<boolean> {
-  if (
-    !hasAdminSessionConfig() ||
-    password.trim() !== serverEnv.adminPassword.trim()
-  ) {
+  if (!hasAdminSessionConfig()) {
+    return false;
+  }
+  const input = password.trim();
+  const expected = serverEnv.adminPassword.trim();
+  if (!constantTimeEqual(input, expected)) {
     return false;
   }
 

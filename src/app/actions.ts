@@ -24,6 +24,21 @@ function readString(formData: FormData, key: string): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+/** redirect URL 쿼리에 넣을 때 길이 제한·인코딩 (보안·호환성) */
+function encodeErrorForUrl(message: string, maxLength = 200): string {
+  return encodeURIComponent(
+    message.length > maxLength ? `${message.slice(0, maxLength)}…` : message
+  );
+}
+
+/** 관리자 내부 리다이렉트만 허용 (open redirect 방지) */
+function isSafeAdminRedirectPath(path: string): boolean {
+  if (!path || path.length > 500) return false;
+  if (!path.startsWith("/admin")) return false;
+  if (path.includes("//")) return false;
+  return true;
+}
+
 function hasField(formData: FormData, key: string): boolean {
   return formData.has(key);
 }
@@ -168,7 +183,7 @@ export async function createVenueAction(formData: FormData) {
     });
   } catch (error) {
     const message =
-      error instanceof Error ? encodeURIComponent(error.message) : "unknown";
+      error instanceof Error ? encodeErrorForUrl(error.message) : "unknown";
     redirect(`/venues/new?mode=new&error=${message}`);
   }
 
@@ -212,7 +227,7 @@ export async function updateVenueAction(formData: FormData) {
     });
   } catch (error) {
     const message =
-      error instanceof Error ? encodeURIComponent(error.message) : "unknown";
+      error instanceof Error ? encodeErrorForUrl(error.message) : "unknown";
     redirect(`/venues/${venueId}/edit?error=${message}`);
   }
 
@@ -234,7 +249,7 @@ export async function createVenueReviewAction(formData: FormData) {
     await createVenueReview(venueId, text);
   } catch (error) {
     const message =
-      error instanceof Error ? encodeURIComponent(error.message) : "unknown";
+      error instanceof Error ? encodeErrorForUrl(error.message) : "unknown";
     redirect(`/places/${venueId}?reviewError=${message}`);
   }
 
@@ -273,7 +288,7 @@ export async function submitPlaceSubmissionAction(formData: FormData) {
     });
   } catch (error) {
     const message =
-      error instanceof Error ? encodeURIComponent(error.message) : "unknown";
+      error instanceof Error ? encodeErrorForUrl(error.message) : "unknown";
     redirect(`/submit?error=${message}`);
   }
 
@@ -436,7 +451,7 @@ export async function syncAdminPlaceAction(formData: FormData) {
     await syncAvailabilityForAdminPlace(placeId);
   } catch (error) {
     const message =
-      error instanceof Error ? encodeURIComponent(error.message) : "sync-failed";
+      error instanceof Error ? encodeErrorForUrl(error.message) : "sync-failed";
     redirect(`/admin/places/${placeId}?error=${message}`);
   }
 
@@ -458,7 +473,7 @@ export async function deleteAdminPlaceAction(formData: FormData) {
     await deleteAdminPlace(placeId);
   } catch (error) {
     const message =
-      error instanceof Error ? encodeURIComponent(error.message) : "delete-failed";
+      error instanceof Error ? encodeErrorForUrl(error.message) : "delete-failed";
     redirect(`/admin/places?error=${message}`);
   }
 
@@ -472,7 +487,8 @@ export async function deleteAdminReviewAction(formData: FormData) {
 
   const venueId = readString(formData, "venueId");
   const reviewId = readString(formData, "reviewId");
-  const returnTo = readString(formData, "returnTo");
+  const rawReturnTo = readString(formData, "returnTo");
+  const returnTo = isSafeAdminRedirectPath(rawReturnTo) ? rawReturnTo : null;
   if (!venueId || !reviewId) {
     redirect("/admin/reviews?error=missing-params");
   }
@@ -481,8 +497,8 @@ export async function deleteAdminReviewAction(formData: FormData) {
     await deleteAdminReview(venueId, reviewId);
   } catch (error) {
     const message =
-      error instanceof Error ? encodeURIComponent(error.message) : "delete-failed";
-    const base = returnTo || "/admin/reviews";
+      error instanceof Error ? encodeErrorForUrl(error.message) : "delete-failed";
+    const base = returnTo ?? "/admin/reviews";
     redirect(`${base}?error=${message}`);
   }
 
