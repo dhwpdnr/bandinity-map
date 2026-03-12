@@ -8,7 +8,7 @@ import { applyDraftToPlace } from "@/lib/places";
 import type { Place } from "@/types/place";
 import type { PlaceSubmission, SubmissionStatus } from "@/types/submission";
 
-const PLACES_COLLECTION = "places";
+const VENUES_COLLECTION = "venues";
 const SUBMISSIONS_COLLECTION = "placeSubmissions";
 
 function assertAdminDb() {
@@ -42,7 +42,7 @@ export async function listAdminSubmissions(): Promise<PlaceSubmission[]> {
 export async function saveAdminPlace(place: Place): Promise<void> {
   const adminDb = assertAdminDb();
 
-  await adminDb.collection(PLACES_COLLECTION).doc(place.id).set({
+  await adminDb.collection(VENUES_COLLECTION).doc(place.id).set({
     ...place,
     isLegacy: false,
     lastUpdatedAt: new Date().toISOString(),
@@ -75,7 +75,7 @@ export async function decideSubmission(
     const nextPlace = applyDraftToPlace(base, submission.draft);
     const placeId = submission.targetPlaceId || submissionId;
 
-    await adminDb.collection(PLACES_COLLECTION).doc(placeId).set({
+    await adminDb.collection(VENUES_COLLECTION).doc(placeId).set({
       ...nextPlace,
       id: placeId,
       lastUpdatedAt: new Date().toISOString(),
@@ -114,7 +114,7 @@ export async function syncAvailabilityForAdminPlace(placeId: string): Promise<vo
   const nextInquiryDates =
     place.inquiryDates.length > 0 ? place.inquiryDates : result.inquiryDates;
 
-  await adminDb.collection(PLACES_COLLECTION).doc(placeId).set(
+  await adminDb.collection(VENUES_COLLECTION).doc(placeId).set(
     {
       ...place,
       openDates: nextOpenDates,

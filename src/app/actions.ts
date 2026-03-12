@@ -10,7 +10,8 @@ import {
   syncAvailabilityForAdminPlace,
 } from "@/lib/admin-place-service";
 import { parseDateListInput } from "@/lib/dates";
-import { createVenueFromDraft, getPlaceById, updateVenueFromDraft } from "@/lib/places";
+import { computeChangedDraftFields } from "@/lib/place-utils";
+import { findDuplicateVenue, getPlaceById } from "@/lib/places";
 import { createVenueReview } from "@/lib/reviews";
 import { createPlaceSubmission } from "@/lib/submissions";
 import type { Place, VerificationStatus } from "@/types/place";
@@ -152,10 +153,17 @@ export async function createVenueAction(formData: FormData) {
     redirect("/venues/new?mode=new&error=address-search-required");
   }
 
-  let venueId = "";
+  const duplicate = await findDuplicateVenue(draft);
+  if (duplicate) {
+    redirect("/venues/new?mode=new&error=duplicate-venue");
+  }
 
   try {
-    venueId = await createVenueFromDraft(draft);
+    await createPlaceSubmission({
+      submissionType: "create",
+      draft,
+      submitterName: "웹 등록",
+    });
   } catch (error) {
     const message =
       error instanceof Error ? encodeURIComponent(error.message) : "unknown";
@@ -163,7 +171,8 @@ export async function createVenueAction(formData: FormData) {
   }
 
   revalidatePath("/");
-  redirect(`/places/${venueId}?success=created`);
+  revalidatePath("/admin/submissions");
+  redirect("/?success=submitted");
 }
 
 export async function updateVenueAction(formData: FormData) {
@@ -187,8 +196,18 @@ export async function updateVenueAction(formData: FormData) {
     redirect(`/venues/${venueId}/edit?error=address-search-required`);
   }
 
+  const changedOnly = computeChangedDraftFields(existing, draft);
+  if (Object.keys(changedOnly).length === 0) {
+    redirect(`/venues/${venueId}/edit?error=no-changes`);
+  }
+
   try {
-    await updateVenueFromDraft(venueId, existing, draft);
+    await createPlaceSubmission({
+      submissionType: "edit",
+      targetPlaceId: venueId,
+      draft: changedOnly,
+      submitterName: "웹 등록",
+    });
   } catch (error) {
     const message =
       error instanceof Error ? encodeURIComponent(error.message) : "unknown";
@@ -196,8 +215,9 @@ export async function updateVenueAction(formData: FormData) {
   }
 
   revalidatePath("/");
+  revalidatePath("/admin/submissions");
   revalidatePath(`/places/${venueId}`);
-  redirect(`/places/${venueId}?success=updated`);
+  redirect(`/places/${venueId}?success=update-requested`);
 }
 
 export async function createVenueReviewAction(formData: FormData) {
@@ -265,7 +285,7 @@ export async function loginAdminAction(formData: FormData) {
     redirect("/admin/login?error=1");
   }
 
-  redirect("/admin/submissions");
+  redirect("/admin");
 }
 
 export async function logoutAdminAction() {

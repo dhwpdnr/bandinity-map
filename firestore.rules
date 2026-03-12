@@ -11,6 +11,12 @@ service cloud.firestore {
         allow read, write: if true;
       }
     }
+
+    match /placeSubmissions/{submissionId} {
+      allow read: if false;
+      allow create: if true;
+      allow update, delete: if false;
+    }
   }
 
   function isValidVenue(data) {

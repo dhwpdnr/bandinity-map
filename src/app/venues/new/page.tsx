@@ -11,6 +11,7 @@ interface VenueNewPageProps {
 export default async function VenueNewPage({ searchParams }: VenueNewPageProps) {
   const params = await searchParams;
   const error = Array.isArray(params.error) ? params.error[0] : params.error;
+  const success = Array.isArray(params.success) ? params.success[0] : params.success;
   const places = await getPlaces().catch(() => []);
   const regionOptions = Array.from(
     new Set(places.map((place) => place.region).filter(Boolean))
@@ -45,13 +46,21 @@ export default async function VenueNewPage({ searchParams }: VenueNewPageProps) 
             새 공연장 등록
           </h1>
 
+          {success === "submitted" && (
+            <div className="mt-5 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+              등록 요청이 접수되었습니다. 검토 후 반영됩니다.
+            </div>
+          )}
+
           {error && (
             <div className="mt-5 rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">
               {error === "missing-required"
                 ? "이름, 지역, 주소는 필수입니다."
                 : error === "address-search-required"
                   ? "주소를 입력한 뒤 검색 버튼으로 위치를 확인해 주세요."
-                : decodeURIComponent(error)}
+                  : error === "duplicate-venue"
+                    ? "이미 같은 이름과 주소의 장소가 등록되어 있습니다."
+                    : decodeURIComponent(error)}
             </div>
           )}
 

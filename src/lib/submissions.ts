@@ -1,6 +1,6 @@
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { normalizeSubmissionDraft } from "@/lib/place-utils";
+import { normalizeSubmissionDraft, omitUndefinedFields } from "@/lib/place-utils";
 import type {
   PlaceSubmission,
   PlaceSubmissionType,
@@ -9,11 +9,13 @@ import type {
 
 const SUBMISSIONS_COLLECTION = "placeSubmissions";
 
+const DEFAULT_SUBMITTER_NAME = "웹 등록";
+
 export interface CreateSubmissionInput {
   submissionType: PlaceSubmissionType;
   targetPlaceId?: string;
   draft: SubmissionDraft;
-  submitterName: string;
+  submitterName?: string;
   submitterContact?: string;
   message?: string;
 }
@@ -25,23 +27,23 @@ export async function createPlaceSubmission(
     throw new Error("Firebase가 설정되지 않았습니다.");
   }
 
-  const submitterName = input.submitterName.trim();
-  if (!submitterName) {
-    throw new Error("제보자 이름은 필수입니다.");
-  }
+  const submitterName = (input.submitterName?.trim() || DEFAULT_SUBMITTER_NAME).trim();
 
   const draft = normalizeSubmissionDraft(input.draft);
+  const draftForFirestore = omitUndefinedFields(
+    draft as Record<string, unknown>
+  ) as SubmissionDraft;
 
-  const payload: Omit<PlaceSubmission, "id"> = {
+  const payload = omitUndefinedFields({
     submissionType: input.submissionType,
     status: "pending",
     targetPlaceId: input.targetPlaceId?.trim() || undefined,
-    draft,
+    draft: draftForFirestore,
     submitterName,
     submitterContact: input.submitterContact?.trim() || undefined,
     message: input.message?.trim() || undefined,
     createdAt: new Date().toISOString(),
-  };
+  } as Record<string, unknown>) as Omit<PlaceSubmission, "id">;
 
   const docRef = await addDoc(collection(db, SUBMISSIONS_COLLECTION), payload);
   return docRef.id;

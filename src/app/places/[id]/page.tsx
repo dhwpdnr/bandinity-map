@@ -92,9 +92,11 @@ export default async function PlaceDetailPage({
           <div className="space-y-3">
             {success && (
               <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
-                {success === "created"
-                  ? "장소가 등록되었습니다."
-                  : "장소 정보가 저장되었습니다."}
+                {success === "update-requested"
+                  ? "수정 요청이 접수되었습니다. 검토 후 반영됩니다."
+                  : success === "created"
+                    ? "장소가 등록되었습니다."
+                    : "장소 정보가 저장되었습니다."}
               </div>
             )}
             {review && (

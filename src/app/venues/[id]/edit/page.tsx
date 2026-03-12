@@ -48,7 +48,9 @@ export default async function LegacyVenueEditPage({
                 ? "이름, 지역, 주소는 필수입니다."
                 : error === "address-search-required"
                   ? "주소를 수정했다면 검색 버튼으로 위치를 다시 확인해 주세요."
-                : decodeURIComponent(error)}
+                  : error === "no-changes"
+                    ? "변경된 내용이 없습니다."
+                    : decodeURIComponent(error)}
             </div>
           )}
 

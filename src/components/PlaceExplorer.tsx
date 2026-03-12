@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getTodayDateString } from "@/lib/dates";
 import {
@@ -18,9 +19,14 @@ interface PlaceExplorerProps {
 }
 
 export function PlaceExplorer({ places }: PlaceExplorerProps) {
+  const searchParams = useSearchParams();
   const today = getTodayDateString();
   const mainCanvasRef = useRef<HTMLDivElement | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [showCreateSuccess, setShowCreateSuccess] = useState(() =>
+    searchParams.get("success") === "submitted"
+  );
+  const [isCreateSuccessClosing, setIsCreateSuccessClosing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("전체");
   const [showRegionMenu, setShowRegionMenu] = useState(false);
@@ -56,6 +62,20 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
   function clampSheetTranslate(value: number) {
     return Math.min(collapsedTranslate, Math.max(expandedTranslate, value));
   }
+
+  useEffect(() => {
+    if (searchParams.get("success") === "submitted") {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("success");
+      window.history.replaceState(null, "", url.pathname + url.search);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!showCreateSuccess || isCreateSuccessClosing) return;
+    const timer = window.setTimeout(() => setIsCreateSuccessClosing(true), 6000);
+    return () => window.clearTimeout(timer);
+  }, [showCreateSuccess, isCreateSuccessClosing]);
 
   useEffect(() => {
     if (!showRegionMenu) {
@@ -224,6 +244,31 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
             </div>
           </div>
         </header>
+
+        {showCreateSuccess && (
+          <div
+            className={`overflow-hidden border-b border-emerald-500/30 bg-emerald-500/15 px-4 py-3 transition-all duration-300 ease-out sm:px-6 lg:px-8 ${
+              isCreateSuccessClosing ? "max-h-0 opacity-0 py-0" : "max-h-28 opacity-100"
+            }`}
+            onTransitionEnd={() => {
+              if (isCreateSuccessClosing) setShowCreateSuccess(false);
+            }}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-medium text-emerald-200 sm:text-base">
+                생성 요청이 완료되었습니다. 내용 검토 후 반영됩니다.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsCreateSuccessClosing(true)}
+                className="shrink-0 rounded-lg px-2 py-1 text-zinc-400 transition hover:bg-white/10 hover:text-white"
+                aria-label="닫기"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
 
         <main
           ref={mainCanvasRef}

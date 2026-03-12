@@ -74,7 +74,7 @@ export function applyDraftToPlace(base: Place | null, draft: SubmissionDraft) {
   return makePlaceInputFromDraft(base, draft);
 }
 
-async function findDuplicateVenue(
+export async function findDuplicateVenue(
   draft: SubmissionDraft,
   excludeId?: string,
   base?: Place | null

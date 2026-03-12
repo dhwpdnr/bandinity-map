@@ -71,7 +71,7 @@ function normalizeTags(values: unknown): string[] {
   ).sort((a, b) => a.localeCompare(b, "ko"));
 }
 
-function omitUndefinedFields<T extends Record<string, unknown>>(value: T): T {
+export function omitUndefinedFields<T extends Record<string, unknown>>(value: T): T {
   return Object.fromEntries(
     Object.entries(value).filter(([, entryValue]) => entryValue !== undefined)
   ) as T;
@@ -291,6 +291,71 @@ export function normalizeSubmissionDraft(draft: SubmissionDraft): SubmissionDraf
     inquiryDates: normalizeDateList(draft.inquiryDates),
     sourceLinks: normalizeExternalLinks(draft.sourceLinks),
   };
+}
+
+function isEqualDraftValue(
+  a: unknown,
+  b: unknown
+): boolean {
+  if (a === b) return true;
+  if (a == null || b == null) return a === b;
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false;
+    return a.every((v, i) => isEqualDraftValue(v, b[i]));
+  }
+  if (typeof a === "object" && typeof b === "object" && a !== null && b !== null) {
+    const keysA = Object.keys(a as object).sort();
+    const keysB = Object.keys(b as object).sort();
+    if (keysA.length !== keysB.length) return false;
+    return keysA.every(
+      (k, i) => keysB[i] === k && isEqualDraftValue((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k])
+    );
+  }
+  return false;
+}
+
+/**
+ * base와 draft를 비교해 값이 다른 필드만 담은 Partial<SubmissionDraft>를 반환합니다.
+ * 수정 요청 시 변경분만 제출할 때 사용합니다.
+ */
+export function computeChangedDraftFields(
+  base: Place,
+  draft: SubmissionDraft
+): Partial<SubmissionDraft> {
+  const norm = normalizeSubmissionDraft(draft);
+  const result: Partial<SubmissionDraft> = {};
+
+  const pairs: Array<{ draftKey: keyof SubmissionDraft; baseValue: unknown }> = [
+    { draftKey: "name", baseValue: base.name },
+    { draftKey: "placeType", baseValue: base.placeType },
+    { draftKey: "region", baseValue: base.region },
+    { draftKey: "address", baseValue: base.address },
+    { draftKey: "lat", baseValue: base.lat },
+    { draftKey: "lng", baseValue: base.lng },
+    { draftKey: "description", baseValue: base.description },
+    { draftKey: "phone", baseValue: base.phone },
+    { draftKey: "priceInfo", baseValue: base.priceInfo },
+    { draftKey: "equipment", baseValue: base.equipment },
+    { draftKey: "imageUrl", baseValue: base.imageUrl },
+    { draftKey: "bookingLink", baseValue: base.bookingLink },
+    { draftKey: "tags", baseValue: base.tags },
+    { draftKey: "openDates", baseValue: base.openDates },
+    { draftKey: "bookedDates", baseValue: base.bookedDates },
+    { draftKey: "inquiryDates", baseValue: base.inquiryDates },
+    { draftKey: "availabilitySourceType", baseValue: base.availabilitySourceType },
+    { draftKey: "availabilitySourceUrl", baseValue: base.availabilitySourceUrl },
+    { draftKey: "sourceLinks", baseValue: base.sourceLinks },
+    { draftKey: "verificationStatus", baseValue: base.verificationStatus },
+  ];
+
+  for (const { draftKey, baseValue } of pairs) {
+    const draftValue = norm[draftKey];
+    if (!isEqualDraftValue(draftValue, baseValue)) {
+      (result as Record<string, unknown>)[draftKey] = draftValue;
+    }
+  }
+
+  return result;
 }
 
 export function makePlaceInputFromDraft(
