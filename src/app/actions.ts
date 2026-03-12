@@ -5,13 +5,15 @@ import { redirect } from "next/navigation";
 import { createAdminSession, clearAdminSession, requireAdminSession } from "@/lib/admin-auth";
 import {
   decideSubmission,
+  deleteAdminPlace,
+  deleteAdminReview,
   getAdminPlace,
   saveAdminPlace,
   syncAvailabilityForAdminPlace,
 } from "@/lib/admin-place-service";
 import { parseDateListInput } from "@/lib/dates";
 import { computeChangedDraftFields } from "@/lib/place-utils";
-import { findDuplicateVenue, getPlaceById } from "@/lib/places";
+import { applyDraftToPlace, findDuplicateVenue, getPlaceById } from "@/lib/places";
 import { createVenueReview } from "@/lib/reviews";
 import { createPlaceSubmission } from "@/lib/submissions";
 import type { Place, VerificationStatus } from "@/types/place";
@@ -383,6 +385,45 @@ export async function saveAdminPlaceAction(formData: FormData) {
   redirect(`/admin/places/${placeId}?success=1`);
 }
 
+/** 관리자용: VenueForm과 동일한 폼으로 제출 시 바로 저장 (제보 대기 없음) */
+export async function adminUpdateVenueAction(formData: FormData) {
+  await requireAdminSession();
+
+  const venueId = readString(formData, "venueId");
+  if (!venueId) {
+    redirect("/admin/places?error=missing-venue");
+  }
+
+  const existing = await getPlaceById(venueId);
+  if (!existing) {
+    redirect("/admin/places?error=missing-venue");
+  }
+
+  const draft = parseDraft(formData);
+  if (!hasRequiredVenueFields(draft)) {
+    redirect(`/admin/places/${venueId}?error=missing-required`);
+  }
+
+  if (readString(formData, "address") && !hasResolvedAddress(formData)) {
+    redirect(`/admin/places/${venueId}?error=address-search-required`);
+  }
+
+  const nextPlaceInput = applyDraftToPlace(existing, draft);
+  const placeToSave: Place = {
+    ...nextPlaceInput,
+    id: existing.id,
+    lastUpdatedAt: new Date().toISOString(),
+    isLegacy: false,
+  };
+
+  await saveAdminPlace(placeToSave);
+
+  revalidatePath("/");
+  revalidatePath(`/places/${venueId}`);
+  revalidatePath(`/admin/places/${venueId}`);
+  redirect(`/admin/places/${venueId}?success=1`);
+}
+
 export async function syncAdminPlaceAction(formData: FormData) {
   await requireAdminSession();
 
@@ -403,4 +444,51 @@ export async function syncAdminPlaceAction(formData: FormData) {
   revalidatePath(`/places/${placeId}`);
   revalidatePath(`/admin/places/${placeId}`);
   redirect(`/admin/places/${placeId}?success=sync`);
+}
+
+export async function deleteAdminPlaceAction(formData: FormData) {
+  await requireAdminSession();
+
+  const placeId = readString(formData, "placeId");
+  if (!placeId) {
+    redirect("/admin/places?error=missing-place");
+  }
+
+  try {
+    await deleteAdminPlace(placeId);
+  } catch (error) {
+    const message =
+      error instanceof Error ? encodeURIComponent(error.message) : "delete-failed";
+    redirect(`/admin/places?error=${message}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/places");
+  redirect("/admin/places?success=deleted");
+}
+
+export async function deleteAdminReviewAction(formData: FormData) {
+  await requireAdminSession();
+
+  const venueId = readString(formData, "venueId");
+  const reviewId = readString(formData, "reviewId");
+  const returnTo = readString(formData, "returnTo");
+  if (!venueId || !reviewId) {
+    redirect("/admin/reviews?error=missing-params");
+  }
+
+  try {
+    await deleteAdminReview(venueId, reviewId);
+  } catch (error) {
+    const message =
+      error instanceof Error ? encodeURIComponent(error.message) : "delete-failed";
+    const base = returnTo || "/admin/reviews";
+    redirect(`${base}?error=${message}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/reviews");
+  revalidatePath(`/admin/places/${venueId}`);
+  revalidatePath(`/places/${venueId}`);
+  redirect(returnTo ? `${returnTo}?success=review-deleted` : "/admin/reviews?success=deleted");
 }

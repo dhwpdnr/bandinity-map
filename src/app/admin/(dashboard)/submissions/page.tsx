@@ -39,7 +39,7 @@ export default async function AdminSubmissionsPage({
     : {};
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-4 md:p-5">
       <div className="mx-auto max-w-5xl space-y-6">
         <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">

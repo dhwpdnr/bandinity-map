@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 const items = [
   { href: "/admin", label: "대시보드" },
   { href: "/admin/submissions", label: "제보 검토" },
+  { href: "/admin/places", label: "공연장 목록" },
+  { href: "/admin/reviews", label: "리뷰" },
 ];
 
 export function AdminNavLinks() {

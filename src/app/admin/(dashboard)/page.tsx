@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminMainPage() {
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-4 md:p-5">
       <div className="mx-auto max-w-2xl">
         <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
           대시보드

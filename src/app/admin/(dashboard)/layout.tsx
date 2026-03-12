@@ -13,8 +13,8 @@ export default async function AdminDashboardLayout({
   await requireAdminSession();
 
   return (
-    <div className="flex min-h-dvh bg-zinc-100 dark:bg-zinc-950">
-      <aside className="flex w-56 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="flex h-dvh overflow-hidden bg-zinc-100 dark:bg-zinc-950">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex h-14 items-center border-b border-zinc-200 px-4 dark:border-zinc-800">
           <Link
             href="/admin"
@@ -43,7 +43,7 @@ export default async function AdminDashboardLayout({
           </form>
         </div>
       </aside>
-      <main className="flex-1 overflow-auto">
+      <main className="min-h-0 flex-1 overflow-auto">
         {children}
       </main>
     </div>

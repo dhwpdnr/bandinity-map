@@ -209,8 +209,7 @@ export function VenueForm({
 
       <div className="fixed inset-x-4 bottom-4 z-20 md:sticky md:bottom-4 md:inset-x-auto">
         <div className="rounded-[24px] border border-zinc-200 bg-white/96 p-3 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/96">
-          <div className="flex justify-end">
-            <div className="flex w-full items-stretch justify-end gap-2 sm:w-auto sm:min-w-[360px]">
+          <div className="flex w-full items-stretch justify-between gap-2">
               <Link
                 href={cancelHref}
                 className={`inline-flex shrink-0 items-center justify-center rounded-[8px] border border-zinc-200 px-4 py-3 font-medium text-zinc-700 transition hover:border-primary-300 hover:text-primary-700 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-primary-700 dark:hover:text-primary-300 ${actionTextClass}`}
@@ -223,7 +222,6 @@ export function VenueForm({
               >
                 {submitLabel}
               </button>
-            </div>
           </div>
         </div>
       </div>
