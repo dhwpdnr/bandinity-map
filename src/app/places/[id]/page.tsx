@@ -39,7 +39,7 @@ function DetailRow({
       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
         {label}
       </p>
-      <div className="mt-1.5 whitespace-pre-wrap text-sm leading-6 text-zinc-700 dark:text-zinc-200">
+      <div className="mt-1.5 whitespace-pre-wrap text-sm leading-6 text-zinc-200">
         {value}
       </div>
     </section>
@@ -54,7 +54,7 @@ export default async function PlaceDetailPage({
     return (
       <main className={`flex ${PAGE_BG_GRADIENT} items-center justify-center py-12`}>
         <div className={`mx-auto w-full ${PAGE_MAX_WIDTH} ${HEADER_PADDING}`}>
-          <div className={`${CARD_RADIUS} border border-zinc-200 bg-white text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${CARD_PADDING}`}>
+          <div className={`${CARD_RADIUS} border border-white/10 bg-[rgba(11,14,20,0.92)] text-center shadow-[0_14px_36px_-28px_rgba(0,0,0,0.74)] ${CARD_PADDING}`}>
             Firebase 설정 후 상세 페이지를 확인할 수 있습니다.
           </div>
         </div>
@@ -88,13 +88,13 @@ export default async function PlaceDetailPage({
 
   return (
     <div className={PAGE_BG_GRADIENT}>
-      <SiteHeader className="sticky top-0 z-20 border-b border-white/60 bg-white/80 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/75" containerClassName={PAGE_MAX_WIDTH} />
+      <SiteHeader className="sticky top-0 z-20 border-b border-white/10 bg-[rgba(7,10,15,0.86)] backdrop-blur-xl" containerClassName={PAGE_MAX_WIDTH} />
 
       <main className={`mx-auto space-y-3 ${PAGE_MAX_WIDTH} ${PAGE_PADDING}`}>
         {(success || review || reviewError) && (
           <div className="space-y-3">
             {success && (
-              <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+              <div className="rounded-[20px] bg-emerald-500/12 px-4 py-3 text-sm text-emerald-300">
                 {success === "update-requested"
                   ? "수정 요청이 접수되었습니다. 검토 후 반영됩니다."
                   : success === "created"
@@ -103,12 +103,12 @@ export default async function PlaceDetailPage({
               </div>
             )}
             {review && (
-              <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+              <div className="rounded-[20px] bg-emerald-500/12 px-4 py-3 text-sm text-emerald-300">
                 리뷰가 등록되었습니다.
               </div>
             )}
             {reviewError && (
-              <div className="rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">
+              <div className="rounded-[20px] bg-rose-500/12 px-4 py-3 text-sm text-rose-300">
                 {decodeURIComponent(reviewError)}
               </div>
             )}
@@ -119,7 +119,7 @@ export default async function PlaceDetailPage({
           <Link
             href="/"
             aria-label="뒤로가기"
-            className="inline-flex h-6 w-6 items-center justify-center text-base text-zinc-500 transition hover:text-primary-700 dark:text-zinc-400 dark:hover:text-primary-300"
+            className="inline-flex h-6 w-6 items-center justify-center text-base text-zinc-400 transition hover:text-primary-300"
           >
             ←
           </Link>
@@ -129,16 +129,16 @@ export default async function PlaceDetailPage({
           >
             <Link
               href={editHref}
-              className="inline-flex items-center rounded-[8px] border border-zinc-300/80 px-2.5 py-1 text-[11px] font-medium text-zinc-600 transition hover:border-primary-300 hover:text-primary-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-primary-700 dark:hover:text-primary-300"
+              className="inline-flex items-center rounded-[10px] border border-white/12 px-2.5 py-1 text-[11px] font-medium text-zinc-300 transition hover:border-primary-400/60 hover:text-primary-300"
             >
               정보 수정
             </Link>
           </OneTimeCoachBubble>
         </div>
 
-        <section className="overflow-hidden rounded-[32px] border border-zinc-200 bg-white shadow-[0_30px_90px_-56px_rgba(15,23,42,0.6)] dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="overflow-hidden rounded-[32px] border border-white/10 bg-[rgba(11,14,20,0.92)] shadow-[0_14px_36px_-28px_rgba(0,0,0,0.74)]">
           {coverImage ? (
-            <div className="relative aspect-[16/8] w-full overflow-hidden border-b border-zinc-200/80 bg-zinc-100 dark:border-zinc-800/80 dark:bg-zinc-900">
+            <div className="relative aspect-[16/8] w-full overflow-hidden border-b border-white/10 bg-[rgba(16,21,30,0.86)]">
               <Image
                 src={coverImage}
                 alt={place.name}
@@ -153,26 +153,26 @@ export default async function PlaceDetailPage({
           ) : (
             <Link
               href={imageEditHref}
-              className="flex aspect-[16/8] w-full items-center justify-center border-b border-zinc-200/80 bg-[linear-gradient(135deg,rgba(243,244,246,0.95),rgba(228,231,235,0.92))] px-6 text-center transition hover:bg-[linear-gradient(135deg,rgba(235,238,242,0.98),rgba(220,225,231,0.95))] dark:border-zinc-800/80 dark:bg-[linear-gradient(135deg,rgba(21,24,32,0.96),rgba(13,16,22,0.98))] dark:hover:bg-[linear-gradient(135deg,rgba(28,32,42,0.98),rgba(17,20,28,1))]"
+              className="flex aspect-[16/8] w-full items-center justify-center border-b border-white/10 bg-[linear-gradient(135deg,rgba(19,24,33,0.96),rgba(13,16,22,0.98))] px-6 text-center transition hover:bg-[linear-gradient(135deg,rgba(26,31,42,0.98),rgba(17,20,28,1))]"
             >
               <div>
-                <p className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                <p className="text-base font-semibold text-zinc-100">
                   대표 사진이 아직 없습니다
                 </p>
-                <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+                <p className="mt-2 text-sm text-zinc-400">
                   눌러서 사진을 추가해 주세요
                 </p>
               </div>
             </Link>
           )}
 
-          <div className={`border-b border-zinc-200/80 dark:border-zinc-800/80 ${CARD_PADDING}`}>
-            <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-[2.2rem]">
+          <div className={`border-b border-white/10 ${CARD_PADDING}`}>
+            <h1 className="text-3xl font-semibold tracking-tight text-zinc-100 sm:text-[2.2rem]">
               {place.name}
             </h1>
           </div>
 
-          <div className="divide-y divide-zinc-200/80 dark:divide-zinc-800/80">
+          <div className="divide-y divide-white/10">
             <DetailRow label="지역" value={place.region} />
             <DetailRow label="주소" value={place.address} />
             <DetailRow
@@ -213,7 +213,7 @@ export default async function PlaceDetailPage({
               <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
                 <Link
                   href={imageEditHref}
-                  className="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-[16px] border border-dashed border-zinc-300 bg-[linear-gradient(180deg,rgba(249,250,251,0.92),rgba(241,245,249,0.88))] text-center text-zinc-500 transition hover:border-primary-300 hover:text-primary-700 dark:border-zinc-700 dark:bg-[linear-gradient(180deg,rgba(22,25,32,0.95),rgba(16,18,25,0.98))] dark:text-zinc-400 dark:hover:border-primary-700 dark:hover:text-primary-300 sm:h-28 sm:w-28"
+                  className="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-[16px] border border-dashed border-white/14 bg-[rgba(16,21,30,0.86)] text-center text-zinc-400 transition hover:border-primary-400/60 hover:text-primary-300 sm:h-28 sm:w-28"
                 >
                   <span className="text-3xl leading-none">+</span>
                   <span className="mt-2 text-xs font-medium sm:text-sm">사진 추가</span>
@@ -226,7 +226,7 @@ export default async function PlaceDetailPage({
                       href={imageUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="relative h-24 w-24 shrink-0 overflow-hidden rounded-[16px] bg-zinc-100 dark:bg-zinc-800 sm:h-28 sm:w-28"
+                      className="relative h-24 w-24 shrink-0 overflow-hidden rounded-[16px] bg-[rgba(16,21,30,0.86)] sm:h-28 sm:w-28"
                     >
                       <Image
                         src={imageUrl}

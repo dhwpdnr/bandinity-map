@@ -20,13 +20,13 @@ export default async function VenueNewPage({ searchParams }: VenueNewPageProps) 
 
   return (
     <main className={PAGE_BG_GRADIENT}>
-      <SiteHeader className="border-b border-zinc-200/80 bg-white/85 backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-950/80" containerClassName={PAGE_MAX_WIDTH} />
+      <SiteHeader className="border-b border-white/10 bg-[rgba(7,10,15,0.86)] backdrop-blur-xl" containerClassName={PAGE_MAX_WIDTH} />
       <div className={`mx-auto space-y-3 ${PAGE_MAX_WIDTH} ${PAGE_PADDING}`}>
         <div>
           <Link
             href="/"
             aria-label="뒤로가기"
-            className="inline-flex h-8 w-8 items-center justify-center text-lg text-zinc-500 transition hover:text-primary-700 dark:text-zinc-400 dark:hover:text-primary-300"
+            className="inline-flex h-8 w-8 items-center justify-center text-lg text-zinc-400 transition hover:text-primary-300"
           >
             ←
           </Link>
@@ -35,26 +35,26 @@ export default async function VenueNewPage({ searchParams }: VenueNewPageProps) 
         <div className="overflow-hidden rounded-[18px] border border-white/8 bg-[linear-gradient(90deg,rgba(16,18,24,0.96),rgba(21,24,31,0.98))] shadow-[0_18px_42px_-28px_rgba(0,0,0,0.85)]">
           <div className="flex">
             <div className="w-1.5 shrink-0 bg-primary-400" />
-            <div className="px-4 py-3 text-[13px] leading-6 text-zinc-200 sm:px-5 sm:text-sm">
-              누구나 공연장 정보를 등록할 수 있습니다. 잘못된 정보는 언제든 수정할 수 있어요.
-              기존에 등록되어 있는 공연장이 아닌지 확인해 주세요.
+            <div className="px-4 py-2.5 text-[12px] leading-snug text-zinc-300 sm:px-5 sm:py-3 sm:text-sm sm:leading-6">
+              <p>누구나 등록 가능 · 잘못된 정보는 언제든 수정</p>
+              <p className="mt-1 text-zinc-400">중복 등록 전 목록에서 동일 공연장 여부를 확인해 주세요.</p>
             </div>
           </div>
         </div>
 
-        <section className={`${CARD_RADIUS} border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${CARD_PADDING}`}>
-          <h1 className="text-[1.75rem] font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 md:text-[1.9rem]">
+        <section className={`${CARD_RADIUS} border border-white/10 bg-[rgba(11,14,20,0.92)] shadow-[0_14px_36px_-28px_rgba(0,0,0,0.74)] ${CARD_PADDING}`}>
+          <h1 className="text-[1.75rem] font-semibold tracking-tight text-zinc-100 md:text-[1.9rem]">
             새 공연장 등록
           </h1>
 
           {success === "submitted" && (
-            <div className="mt-5 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+            <div className="mt-5 rounded-[20px] bg-emerald-500/12 px-4 py-3 text-sm text-emerald-300">
               등록 요청이 접수되었습니다. 검토 후 반영됩니다.
             </div>
           )}
 
           {error && (
-            <div className="mt-5 rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">
+            <div className="mt-5 rounded-[20px] bg-rose-500/12 px-4 py-3 text-sm text-rose-300">
               {error === "missing-required"
                 ? "이름, 지역, 주소는 필수입니다."
                 : error === "address-search-required"

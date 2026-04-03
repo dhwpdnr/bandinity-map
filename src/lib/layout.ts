@@ -3,7 +3,7 @@
  */
 export const PAGE_MAX_WIDTH = "max-w-6xl";
 export const PAGE_PADDING = "px-4 py-5 md:px-6 md:py-6";
-export const CARD_RADIUS = "rounded-[32px]";
+export const CARD_RADIUS = "rounded-[28px]";
 export const CARD_PADDING = "p-5 sm:px-6 md:p-6";
 
 /** 헤더 내부 컨테이너와 동일한 수평 패딩 (PlaceExplorer 등) */

@@ -41,7 +41,7 @@ export default async function AdminSubmissionsPage({
   return (
     <div className="p-4 md:p-5">
       <div className="mx-auto max-w-5xl space-y-6">
-        <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="rounded-[20px] border border-white/10 bg-[rgba(11,14,20,0.92)] p-6 shadow-[0_14px_36px_-28px_rgba(0,0,0,0.74)]">
           <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
             제보 검토
           </h1>
@@ -50,20 +50,20 @@ export default async function AdminSubmissionsPage({
           </p>
 
           {!hasAdminCredentials() && (
-            <div className="mt-5 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:bg-amber-950/30 dark:text-amber-300">
+            <div className="mt-5 rounded-[14px] bg-amber-500/12 px-4 py-3 text-sm text-amber-300">
               Firebase Admin SDK 환경 변수가 설정되지 않았습니다.
               <pre className="mt-2 text-xs">{getMissingAdminEnvKeys().join("\n")}</pre>
             </div>
           )}
 
           {success && (
-            <div className="mt-5 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+            <div className="mt-5 rounded-[14px] bg-emerald-500/12 px-4 py-3 text-sm text-emerald-300">
               요청을 처리했습니다.
             </div>
           )}
 
           {error && (
-            <div className="mt-5 rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">
+            <div className="mt-5 rounded-[14px] bg-rose-500/12 px-4 py-3 text-sm text-rose-300">
               {decodeURIComponent(error)}
             </div>
           )}

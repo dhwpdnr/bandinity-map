@@ -13,30 +13,30 @@ export default async function AdminDashboardLayout({
   await requireAdminSession();
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-zinc-100 dark:bg-zinc-950">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex h-14 items-center border-b border-zinc-200 px-4 dark:border-zinc-800">
+    <div className="flex h-dvh overflow-hidden bg-[var(--surface-app)]">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-white/10 bg-[rgba(11,14,20,0.95)]">
+        <div className="flex h-14 items-center border-b border-white/10 px-4">
           <Link
             href="/admin"
-            className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100"
+            className="text-lg font-semibold tracking-tight text-zinc-100"
           >
             관리자
           </Link>
         </div>
         <AdminNavLinks />
-        <div className="border-t border-zinc-200 p-3 dark:border-zinc-800">
+        <div className="border-t border-white/10 p-3">
           <Link
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mb-2 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            className="mb-2 flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-sm text-zinc-400 transition hover:bg-white/5 hover:text-zinc-200"
           >
             공개 홈 →
           </Link>
           <form action={logoutAdminAction}>
             <button
               type="submit"
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+              className="flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-sm font-medium text-zinc-300 transition hover:bg-white/5 hover:text-zinc-100"
             >
               로그아웃
             </button>

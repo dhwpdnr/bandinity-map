@@ -25,7 +25,7 @@ export function PlaceList({
 
   if (places.length === 0) {
     return (
-      <div className="rounded-[18px] border border-dashed border-white/12 bg-[rgba(14,16,22,0.9)] p-5 text-center text-[12px] text-zinc-400 sm:rounded-[24px] sm:p-8 sm:text-sm">
+      <div className="rounded-[20px] border border-dashed border-white/14 bg-[rgba(11,14,20,0.92)] p-5 text-center text-[12px] text-zinc-400 sm:rounded-[20px] sm:p-8 sm:text-sm">
         조건에 맞는 장소가 없습니다. 필터를 조금 넓혀 보세요.
       </div>
     );

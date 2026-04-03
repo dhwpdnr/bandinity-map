@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { RADIUS_CONTROL, RADIUS_PANEL } from "@/lib/ui";
 import type { Place } from "@/types/place";
 
 interface PlaceCardProps {
@@ -24,14 +25,14 @@ export function PlaceCard({ place, isSelected, onSelect }: PlaceCardProps) {
           onSelect?.();
         }
       }}
-      className={`group cursor-pointer rounded-[18px] border p-2.5 transition duration-200 sm:rounded-[22px] sm:p-3.5 lg:rounded-[24px] lg:p-4 ${
+      className={`group cursor-pointer border p-2.5 transition-colors duration-200 sm:p-3.5 lg:p-4 ${RADIUS_PANEL} ${
         isSelected
-          ? "border-primary-400/80 bg-[linear-gradient(120deg,rgba(19,24,33,0.98),rgba(16,18,26,0.98))]"
-          : "border-white/10 bg-[linear-gradient(120deg,rgba(21,24,31,0.96),rgba(12,14,20,0.96))] shadow-[0_26px_64px_-46px_rgba(0,0,0,0.95)] hover:border-white/20"
+          ? "border-primary-400/55 bg-[rgba(14,18,25,0.96)]"
+          : "border-white/10 bg-[rgba(11,14,20,0.95)] hover:border-white/20"
       }`}
     >
       <div className="flex min-w-0 items-start gap-2.5 sm:gap-3.5 lg:gap-4">
-        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[12px] bg-[linear-gradient(135deg,#23252f,#11131a)] ring-1 ring-white/6 sm:h-[64px] sm:w-[64px] sm:rounded-[16px] lg:h-[72px] lg:w-[72px] lg:rounded-[18px]">
+        <div className={`relative h-12 w-12 shrink-0 overflow-hidden bg-[rgba(20,25,34,0.95)] ring-1 ring-white/8 sm:h-[64px] sm:w-[64px] lg:h-[72px] lg:w-[72px] ${RADIUS_CONTROL}`}>
           {thumbnail ? (
             <Image
               src={thumbnail}
@@ -64,7 +65,7 @@ export function PlaceCard({ place, isSelected, onSelect }: PlaceCardProps) {
               <Link
                 href={`/places/${place.id}`}
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1 rounded-[8px] bg-primary-400 px-3 py-1.5 text-[11px] font-semibold text-zinc-950 transition hover:bg-primary-300 sm:rounded-[10px] sm:px-3.5 sm:py-2 sm:text-xs"
+              className={`inline-flex items-center gap-1 bg-primary-400 px-3 py-1.5 text-[11px] font-semibold text-zinc-950 transition hover:bg-primary-300 sm:px-3.5 sm:py-2 sm:text-xs ${RADIUS_CONTROL}`}
               >
                 상세정보 보러가기
                 <span aria-hidden>→</span>

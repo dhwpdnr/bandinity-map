@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { getTodayDateString } from "@/lib/dates";
 import { HEADER_PADDING, PAGE_MAX_WIDTH } from "@/lib/layout";
+import { BUTTON_PRIMARY, PANEL_SURFACE, RADIUS_CONTROL } from "@/lib/ui";
 import {
   getRegionsByCount,
   sortPlacesByIntent,
@@ -223,23 +224,23 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
   }
 
   return (
-    <div className="h-dvh overflow-hidden bg-[#020409] text-white sm:min-h-dvh sm:h-auto sm:bg-[#06080d]">
-      <div className="flex h-full w-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(44,48,62,0.34),_transparent_30%),linear-gradient(180deg,#06080d_0%,#020409_100%)] sm:h-auto sm:rounded-none sm:border-0 sm:shadow-none">
+    <div className="h-dvh overflow-hidden bg-[var(--surface-app)] text-white sm:min-h-dvh sm:h-auto sm:bg-[var(--surface-app-alt)]">
+      <div className="flex h-full w-full min-w-0 flex-col overflow-hidden bg-[var(--surface-app)] sm:h-auto sm:rounded-none sm:border-0 sm:shadow-none">
         <header className="border-b border-white/10">
           <div className={`mx-auto ${PAGE_MAX_WIDTH} ${HEADER_PADDING}`}>
-            <div className="flex min-h-[60px] items-center gap-2.5 sm:min-h-[64px] sm:gap-4 lg:min-h-[68px] lg:gap-6">
+            <div className="flex min-h-[60px] items-center gap-2.5 sm:min-h-[64px] sm:gap-4 lg:min-h-[68px] lg:gap-5">
               <div className="shrink-0">
                 <Logo />
               </div>
 
               <div className="relative min-w-0 flex-1">
-                <div className="flex overflow-hidden rounded-[16px] border border-white/12 bg-[linear-gradient(90deg,rgba(29,31,40,0.98),rgba(41,43,53,0.9))] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_14px_28px_-24px_rgba(0,0,0,0.95)] sm:rounded-[20px] lg:rounded-[22px]">
+                <div className="flex overflow-hidden rounded-[16px] border border-white/12 bg-[rgba(13,16,23,0.96)] sm:rounded-[20px]">
                 <input
                   type="search"
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="공연장 이름 검색"
-                  className="min-w-0 flex-1 bg-transparent px-3.5 py-2 text-[13px] text-white outline-none placeholder:text-zinc-500 sm:px-5 sm:py-2.5 sm:text-[15px] lg:px-6 lg:py-3 lg:text-base"
+                  className="min-w-0 flex-1 bg-transparent px-3.5 py-2 text-[13px] text-white outline-none placeholder:text-zinc-500 sm:px-5 sm:py-2.5 sm:text-[15px] lg:px-6 lg:py-2.5 lg:text-[15px]"
                 />
                 </div>
               </div>
@@ -288,7 +289,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
           </section>
 
           <aside
-            className="absolute inset-x-0 bottom-0 z-10 flex min-h-[45dvh] flex-col overflow-hidden rounded-t-[24px] border-x-0 border-t border-white/8 bg-[linear-gradient(180deg,rgba(8,10,16,0.97),rgba(4,6,10,0.995))] shadow-[0_-28px_64px_-36px_rgba(0,0,0,0.98)] sm:static sm:mt-4 sm:block sm:h-auto sm:min-h-0 sm:overflow-visible sm:rounded-[24px] sm:border sm:border-white/8 sm:px-4 sm:py-4 sm:shadow-none lg:mt-0 lg:rounded-[28px] lg:px-4 lg:pb-4 lg:pt-4"
+            className={`${PANEL_SURFACE} absolute inset-x-0 bottom-0 z-10 flex min-h-[45dvh] flex-col overflow-hidden rounded-t-[24px] border-x-0 border-t border-white/10 bg-[rgba(11,14,20,0.96)] shadow-[0_-12px_28px_-24px_rgba(0,0,0,0.72)] sm:static sm:mt-4 sm:block sm:h-auto sm:min-h-0 sm:overflow-visible sm:border sm:px-4 sm:py-4 sm:shadow-none lg:mt-0 lg:rounded-[28px] lg:px-4 lg:pb-4 lg:pt-4`}
             style={
               isMobileViewport
                 ? {
@@ -316,13 +317,13 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
             <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 sm:block sm:px-0 sm:pb-0">
               <div className="relative mb-3 flex items-center justify-between gap-3 sm:mb-5" ref={regionMenuRef}>
                 <div className="flex min-w-0 items-center gap-2">
-                  <h2 className="min-w-0 text-[15px] font-semibold tracking-[-0.03em] text-zinc-300 sm:text-lg lg:text-[1.2rem]">
+                  <h2 className="min-w-0 text-[15px] font-semibold tracking-[-0.02em] text-zinc-200 sm:text-lg lg:text-[1.1rem]">
                     공연장 목록 ({filteredPlaces.length}곳)
                   </h2>
                   <button
                     type="button"
                     onClick={() => setShowRegionMenu((current) => !current)}
-                    className="inline-flex min-w-0 items-center gap-1.5 rounded-[8px] border border-white/10 bg-[rgba(23,26,34,0.96)] px-2.5 py-1.5 text-[11px] font-medium text-zinc-200 transition hover:border-white/20 hover:bg-[rgba(30,34,44,0.98)] sm:rounded-[10px] sm:px-3 sm:py-2 sm:text-xs"
+                    className={`inline-flex min-w-0 items-center gap-1.5 border border-white/12 bg-[rgba(13,16,23,0.95)] px-2.5 py-1.5 text-[11px] font-medium text-zinc-200 transition-colors duration-200 hover:border-white/24 hover:bg-[rgba(18,23,31,0.98)] sm:px-3 sm:py-2 sm:text-xs ${RADIUS_CONTROL}`}
                   >
                     <span className="text-zinc-400">지역</span>
                     <span className="truncate text-white">{selectedRegion}</span>
@@ -343,24 +344,24 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
                 >
                   <Link
                     href="/venues/new"
-                    className="shrink-0 rounded-[8px] bg-primary-400 px-2.5 py-1.5 text-[11px] font-semibold text-zinc-950 transition hover:bg-primary-300 sm:rounded-[10px] sm:px-3 sm:py-2 sm:text-xs lg:px-3.5"
+                    className={`${BUTTON_PRIMARY} shrink-0 px-2.5 py-1.5 text-[11px] sm:px-3 sm:py-2 sm:text-xs lg:px-3.5`}
                   >
                     + 공연장 추가
                   </Link>
                 </OneTimeCoachBubble>
 
                 {showRegionMenu && (
-                  <div className="absolute left-0 top-[calc(100%+8px)] z-20 w-[min(320px,calc(100vw-72px))] rounded-[18px] border border-white/10 bg-[rgba(13,16,22,0.98)] p-2.5 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.96)] backdrop-blur sm:w-[360px] sm:rounded-[22px] sm:p-3">
+                  <div className="absolute left-0 top-[calc(100%+8px)] z-20 w-[min(320px,calc(100vw-72px))] rounded-[18px] border border-white/12 bg-[rgba(11,14,20,0.98)] p-2.5 shadow-[0_12px_30px_-24px_rgba(0,0,0,0.78)] backdrop-blur sm:w-[360px] sm:rounded-[20px] sm:p-3">
                     <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                       {regions.map((region) => (
                         <button
                           key={region}
                           type="button"
                           onClick={() => handleRegionSelect(region)}
-                          className={`rounded-[8px] px-2.5 py-2 text-[11px] font-medium transition sm:rounded-[10px] sm:px-3 sm:py-2.5 sm:text-xs ${
+                          className={`${RADIUS_CONTROL} px-2.5 py-2 text-[11px] font-medium transition sm:px-3 sm:py-2.5 sm:text-xs ${
                             selectedRegion === region
                               ? "bg-primary-400 text-zinc-950"
-                              : "bg-[rgba(74,76,88,0.52)] text-zinc-200 hover:bg-[rgba(90,93,108,0.82)]"
+                              : "bg-[rgba(43,48,60,0.52)] text-zinc-200 hover:bg-[rgba(58,64,80,0.78)]"
                           }`}
                         >
                           {region}
@@ -371,7 +372,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
                 )}
               </div>
 
-              <div className="-mx-1 min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-1 pb-8 pt-1 sm:mx-0 sm:max-h-[52dvh] sm:px-0 sm:pb-6 lg:max-h-[calc(100dvh-340px)] lg:pr-2 lg:pb-8">
+              <div className="-mx-1 min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-1 pt-1 pb-[max(7rem,calc(5rem+env(safe-area-inset-bottom,0px)))] sm:mx-0 sm:max-h-[52dvh] sm:px-0 sm:pb-6 lg:max-h-[calc(100dvh-340px)] lg:pr-2 lg:pb-8">
                 <PlaceList
                   places={filteredPlaces}
                   selectedId={activeSelectedId}

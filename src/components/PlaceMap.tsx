@@ -65,7 +65,7 @@ function PopupContent({
       <div
         ref={popupRef}
         style={{ width: metrics.width }}
-        className='rounded-[12px] border border-white/12 bg-[linear-gradient(180deg,rgba(19,24,33,0.96),rgba(27,31,40,0.94))] px-2 py-1.25 text-white shadow-[0_16px_34px_-24px_rgba(15,23,42,0.9)] backdrop-blur sm:rounded-[18px] sm:px-3 sm:py-2 sm:shadow-[0_22px_48px_-28px_rgba(15,23,42,0.9)]'
+        className='rounded-[10px] border border-white/12 bg-[rgba(11,14,20,0.96)] px-2 py-1.25 text-white shadow-[0_10px_24px_-20px_rgba(0,0,0,0.8)] backdrop-blur sm:rounded-[20px] sm:px-3 sm:py-2 sm:shadow-[0_12px_28px_-22px_rgba(0,0,0,0.82)]'
       >
         <p className={`truncate font-semibold leading-tight ${metrics.compact ? 'text-[11px]' : 'text-[12px] sm:text-[15px] lg:text-base'}`}>{place.name}</p>
         <Link href={`/places/${place.id}`} className={`mt-0.5 inline-flex items-center gap-1 font-medium text-primary-400 transition hover:text-primary-300 ${metrics.compact ? 'text-[9px]' : 'text-[10px] sm:text-[12px] lg:text-sm'}`}>
@@ -79,7 +79,7 @@ function PopupContent({
 
 const MARKER_SIZE = { width: 32, height: 42 };
 const MARKER_OFFSET = { x: 16, y: 39 };
-const DEFAULT_PIN = makePin('#27272a');
+const DEFAULT_PIN = makePin('#171717');
 const SELECTED_PIN = makePin('#64c5da');
 
 function getDesiredMarkerScreenY() {
@@ -158,7 +158,10 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, selecte
   const viewportPlaces = fitPlaces ?? places;
 
   useEffect(() => {
-    setPopupMetrics(getPopupMetrics());
+    const sync = () => queueMicrotask(() => setPopupMetrics(getPopupMetrics()));
+    sync();
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
   }, []);
 
   useEffect(() => {
@@ -289,7 +292,7 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, selecte
 
   if (!publicEnv.kakaoAppKey) {
     return (
-      <div className='flex h-full min-h-[320px] items-center justify-center rounded-[28px] border border-dashed border-zinc-300 bg-white/70 p-6 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-400'>
+      <div className='flex h-full min-h-[320px] items-center justify-center rounded-[28px] border border-dashed border-white/20 bg-[rgba(9,12,18,0.88)] p-6 text-center text-sm text-zinc-300'>
         카카오 지도 키가 설정되지 않았습니다. `NEXT_PUBLIC_KAKAO_APP_KEY`를 추가해 주세요.
       </div>
     );
@@ -302,7 +305,7 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, selecte
         : '지도를 불러오지 못했습니다. 카카오 지도 설정을 확인해 주세요.';
 
     return (
-      <div className='flex h-full min-h-[320px] items-center justify-center rounded-[28px] border border-dashed border-zinc-300 bg-white/70 p-6 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-400'>
+      <div className='flex h-full min-h-[320px] items-center justify-center rounded-[28px] border border-dashed border-white/20 bg-[rgba(9,12,18,0.88)] p-6 text-center text-sm text-zinc-300'>
         {errorMessage}
       </div>
     );
@@ -310,8 +313,8 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, selecte
 
   if (loading) {
     return (
-      <div className='flex h-full min-h-[320px] items-center justify-center rounded-[28px] border border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/70'>
-        <div className='flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400'>
+      <div className='flex h-full min-h-[320px] items-center justify-center rounded-[28px] border border-white/12 bg-[rgba(11,14,20,0.92)]'>
+        <div className='flex items-center gap-3 text-sm text-zinc-300'>
           <Image src='/globe.svg' alt='' width={18} height={18} />
           지도 로딩 중...
         </div>
@@ -323,7 +326,7 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, selecte
   const level = selectedPlace ? 4 : viewport.level;
 
   return (
-    <div ref={containerRef} className='relative h-full min-h-[240px] overflow-hidden rounded-[20px] border border-white/10 bg-[#0c0f14] p-1.5 shadow-[0_24px_72px_-48px_rgba(0,0,0,0.85)] sm:min-h-[320px] sm:rounded-[28px] sm:p-3 lg:rounded-[30px]'>
+    <div ref={containerRef} className='relative h-full min-h-[240px] overflow-hidden rounded-[20px] border border-white/10 bg-[var(--surface-map)] p-1.5 shadow-[0_14px_36px_-28px_rgba(0,0,0,0.76)] sm:min-h-[320px] sm:rounded-[28px] sm:p-3'>
       <Map
         center={center}
         level={level}
@@ -364,7 +367,7 @@ export function PlaceMap({ places, fitPlaces, selectedId, onSelectPlace, selecte
               fontWeight: '700',
               lineHeight: '48px',
               textAlign: 'center',
-              boxShadow: '0 12px 28px rgba(15,23,42,0.25)',
+              boxShadow: '0 8px 18px rgba(2,6,12,0.35)',
             },
           ]}
         >

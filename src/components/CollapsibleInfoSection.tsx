@@ -27,14 +27,14 @@ export function CollapsibleInfoSection({
         <button
           type="button"
           onClick={() => setOpen((current) => !current)}
-          className="shrink-0 rounded-[8px] border border-zinc-200 px-2.5 py-1 text-[11px] font-medium text-zinc-600 transition hover:border-primary-300 hover:text-primary-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-primary-700 dark:hover:text-primary-300"
+          className="shrink-0 rounded-[10px] border border-white/12 px-2.5 py-1 text-[11px] font-medium text-zinc-300 transition hover:border-primary-400/60 hover:text-primary-300"
         >
           {open ? "접기" : "눌러서 장비 보기"}
         </button>
       </div>
 
       {open && (
-        <p className="mt-2.5 whitespace-pre-wrap text-sm leading-6 text-zinc-700 dark:text-zinc-200">
+        <p className="mt-2.5 whitespace-pre-wrap text-sm leading-6 text-zinc-200">
           {content || emptyText}
         </p>
       )}

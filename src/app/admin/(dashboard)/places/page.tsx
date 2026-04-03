@@ -20,7 +20,7 @@ export default async function AdminPlacesListPage({
   return (
     <div className="p-4 md:p-5">
       <div className="w-full space-y-6">
-        <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="rounded-[20px] border border-white/10 bg-[rgba(11,14,20,0.92)] p-6 shadow-[0_14px_36px_-28px_rgba(0,0,0,0.74)]">
           <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
             공연장 목록
           </h1>
@@ -32,20 +32,20 @@ export default async function AdminPlacesListPage({
           </p>
 
           {success === "deleted" && (
-            <div className="mt-5 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+            <div className="mt-5 rounded-[14px] bg-emerald-500/12 px-4 py-3 text-sm text-emerald-300">
               공연장을 삭제했습니다.
             </div>
           )}
 
           {error && (
-            <div className="mt-5 rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">
+            <div className="mt-5 rounded-[14px] bg-rose-500/12 px-4 py-3 text-sm text-rose-300">
               {decodeURIComponent(error)}
             </div>
           )}
 
           <div className="mt-6">
             {places.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-zinc-300 bg-white/70 p-6 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-400">
+              <div className="rounded-[20px] border border-dashed border-white/14 bg-[rgba(16,21,30,0.72)] p-6 text-center text-sm text-zinc-400">
                 등록된 공연장이 없습니다.
               </div>
             ) : (

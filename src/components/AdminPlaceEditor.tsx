@@ -1,8 +1,8 @@
 import type { Place } from "@/types/place";
+import { BUTTON_PRIMARY, BUTTON_SECONDARY, CARD_SURFACE, INPUT_BASE, LABEL_BASE } from "@/lib/ui";
 
-const fieldClass =
-  "w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary-400 dark:border-zinc-700 dark:bg-zinc-900";
-const labelClass = "text-sm font-medium text-zinc-700 dark:text-zinc-300";
+const fieldClass = INPUT_BASE;
+const labelClass = LABEL_BASE;
 
 interface AdminPlaceEditorProps {
   place: Place;
@@ -22,8 +22,8 @@ function FormSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-[28px] border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <h2 className="mb-4 text-base font-semibold text-zinc-900 dark:text-zinc-100">
+    <section className={CARD_SURFACE}>
+      <h2 className="mb-4 text-base font-semibold text-zinc-100">
         {title}
       </h2>
       {children}
@@ -262,21 +262,23 @@ export function AdminPlaceEditor({
 
         <button
           type="submit"
-          className="rounded-[8px] bg-zinc-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white"
+          className={BUTTON_PRIMARY}
         >
           장소 저장
         </button>
       </form>
 
-      <form action={syncAction}>
-        <input type="hidden" name="placeId" value={place.id} />
-        <button
-          type="submit"
-          className="rounded-[8px] border border-zinc-200 px-4 py-3 text-sm font-semibold text-zinc-700 transition hover:border-primary-300 hover:text-primary-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-primary-700 dark:hover:text-primary-300"
-        >
-          공개 .ics 캘린더 동기화 실행
-        </button>
-      </form>
+      <div className="rounded-[20px] border border-white/10 bg-[rgba(11,14,20,0.92)] p-4">
+        <form action={syncAction}>
+          <input type="hidden" name="placeId" value={place.id} />
+          <button
+            type="submit"
+            className={BUTTON_SECONDARY}
+          >
+            공개 .ics 캘린더 동기화 실행
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

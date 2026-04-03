@@ -23,5 +23,5 @@ export function PageContainer({ children, className = "" }: PageContainerProps) 
 }
 
 /** 메인 카드/섹션용 클래스 (border 등은 페이지에서 추가) */
-export const mainCardClass = `${CARD_RADIUS} border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900`;
+export const mainCardClass = `${CARD_RADIUS} border border-white/10 bg-[rgba(11,14,20,0.92)] shadow-[0_14px_36px_-28px_rgba(0,0,0,0.74)]`;
 export const mainCardPaddingClass = CARD_PADDING;

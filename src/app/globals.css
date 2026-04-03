@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --surface-app: #020409;
+  --surface-app-alt: #06080d;
+  --surface-panel: #0b0f16;
+  --surface-map: #0c0f14;
 }
 
 @theme inline {
@@ -22,6 +26,9 @@
   --color-primary-700: #1e7b90;
   --color-primary-800: #135e6e;
   --color-primary-900: #0b424f;
+  --color-accent-success: #10b981;
+  --color-accent-error: #ef4444;
+  --color-accent-warning: #f59e0b;
 
   --animate-fade-in-down: fade-in-down 0.2s ease-out both;
   --animate-fade-out-up: fade-out-up 0.15s ease-in both;
@@ -41,6 +48,10 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --surface-app: #020409;
+    --surface-app-alt: #06080d;
+    --surface-panel: #0b0f16;
+    --surface-map: #0c0f14;
   }
 }
 

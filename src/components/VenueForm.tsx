@@ -3,6 +3,7 @@ import type { Place } from "@/types/place";
 import { CoverImageUploadField } from "@/components/CoverImageUploadField";
 import { VenueAddressField } from "@/components/VenueAddressField";
 import { VenueRegionField } from "@/components/VenueRegionField";
+import { BUTTON_PRIMARY, BUTTON_SECONDARY, CARD_SURFACE, INPUT_BASE, LABEL_BASE } from "@/lib/ui";
 
 interface VenueFormProps {
   action: (formData: FormData) => void | Promise<void>;
@@ -45,10 +46,10 @@ function joinLines(values?: string[]) {
 
 function FormSection({ title, children, compact = false }: FormSectionProps) {
   return (
-    <section className="rounded-[28px] border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <section className={CARD_SURFACE}>
       <div className="mb-4">
         <h2
-          className={`font-semibold text-zinc-900 dark:text-zinc-100 ${
+          className={`font-semibold text-zinc-100 ${
             compact ? "text-base" : "text-lg"
           }`}
         >
@@ -75,15 +76,15 @@ export function VenueForm({
       : source;
   })();
   const fieldLabelClass = compact
-    ? "text-[13px] font-medium text-zinc-700 dark:text-zinc-300"
-    : "text-sm font-medium text-zinc-700 dark:text-zinc-300";
+    ? "text-[13px] font-medium text-zinc-300"
+    : LABEL_BASE;
   const fieldClass = compact
-    ? "w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-[13px] outline-none transition focus:border-primary-400 dark:border-zinc-700 dark:bg-zinc-900"
-    : "w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary-400 dark:border-zinc-700 dark:bg-zinc-900";
+    ? "w-full rounded-[10px] border border-white/14 bg-[rgba(10,14,20,0.94)] px-4 py-3 text-[13px] text-zinc-100 outline-none transition-colors duration-200 placeholder:text-zinc-500 focus:border-primary-400/75"
+    : INPUT_BASE;
   const actionTextClass = compact ? "text-[13px]" : "text-sm";
 
   return (
-    <form action={action} className="space-y-5 pb-24">
+    <form action={action} className="space-y-5 pb-6 md:pb-24">
       {initialPlace && <input type="hidden" name="venueId" value={initialPlace.id} />}
       <input
         type="hidden"
@@ -207,21 +208,42 @@ export function VenueForm({
         </div>
       </FormSection>
 
-      <div className="fixed inset-x-4 bottom-4 z-20 md:sticky md:bottom-4 md:inset-x-auto">
-        <div className="rounded-[24px] border border-zinc-200 bg-white/96 p-3 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/96">
-          <div className="flex w-full items-stretch justify-between gap-2">
+      {/* 모바일: 스크롤 끝에서만 노출되어 필드와 겹치지 않음 */}
+      <div className="mt-8 border-t border-white/10 pt-5 md:hidden">
+        <div className="flex w-full items-stretch justify-between gap-2">
+          <Link
+            href={cancelHref}
+            className={`${BUTTON_SECONDARY} shrink-0 ${actionTextClass}`}
+          >
+            취소
+          </Link>
+          <button
+            type="submit"
+            className={`${BUTTON_PRIMARY} flex-1 px-5 ${actionTextClass}`}
+          >
+            {submitLabel}
+          </button>
+        </div>
+      </div>
+
+      {/* 데스크톱: 하단 고정으로 빠른 제출 */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 hidden px-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:block">
+        <div className="pointer-events-auto mx-auto max-w-6xl">
+          <div className="rounded-[20px] border border-white/12 bg-[rgba(11,14,20,0.96)] p-3 shadow-[0_12px_28px_-20px_rgba(0,0,0,0.72)] backdrop-blur">
+            <div className="flex w-full items-stretch justify-between gap-2">
               <Link
                 href={cancelHref}
-                className={`inline-flex shrink-0 items-center justify-center rounded-[8px] border border-zinc-200 px-4 py-3 font-medium text-zinc-700 transition hover:border-primary-300 hover:text-primary-700 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-primary-700 dark:hover:text-primary-300 ${actionTextClass}`}
+                className={`${BUTTON_SECONDARY} shrink-0 ${actionTextClass}`}
               >
                 취소
               </Link>
               <button
                 type="submit"
-                className={`flex-1 rounded-[8px] bg-primary-400 px-5 py-3 font-semibold text-zinc-950 transition hover:bg-primary-300 ${actionTextClass}`}
+                className={`${BUTTON_PRIMARY} flex-1 px-5 ${actionTextClass}`}
               >
                 {submitLabel}
               </button>
+            </div>
           </div>
         </div>
       </div>

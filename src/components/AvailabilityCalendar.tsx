@@ -13,13 +13,13 @@ interface AvailabilityCalendarProps {
 function getTone(status: ReturnType<typeof getAvailabilityStatus>) {
   switch (status) {
     case "open":
-      return "bg-emerald-500/12 text-emerald-700 ring-emerald-500/20 dark:bg-emerald-500/18 dark:text-emerald-300";
+      return "bg-emerald-500/14 text-emerald-300 ring-emerald-500/22";
     case "inquiry":
-      return "bg-amber-500/12 text-amber-700 ring-amber-500/20 dark:bg-amber-500/18 dark:text-amber-300";
+      return "bg-amber-500/14 text-amber-300 ring-amber-500/22";
     case "booked":
-      return "bg-rose-500/12 text-rose-700 ring-rose-500/20 dark:bg-rose-500/18 dark:text-rose-300";
+      return "bg-rose-500/14 text-rose-300 ring-rose-500/22";
     default:
-      return "bg-zinc-900/5 text-zinc-600 ring-zinc-900/10 dark:bg-white/5 dark:text-zinc-400";
+      return "bg-white/5 text-zinc-400 ring-white/10";
   }
 }
 
@@ -32,7 +32,7 @@ function getDotTone(status: ReturnType<typeof getAvailabilityStatus>) {
     case "booked":
       return "bg-rose-500";
     default:
-      return "bg-zinc-300 dark:bg-zinc-600";
+      return "bg-zinc-500";
   }
 }
 
@@ -48,13 +48,13 @@ export function AvailabilityCalendar({
   const days = buildCalendarDays(monthCursor);
 
   return (
-    <section className="rounded-[28px] border border-zinc-200/80 bg-white/90 p-5 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.55)] dark:border-zinc-800 dark:bg-zinc-900/90">
+    <section className="rounded-[28px] border border-white/10 bg-[rgba(11,14,20,0.92)] p-5 shadow-[0_14px_36px_-28px_rgba(0,0,0,0.74)]">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
             Availability
           </p>
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-lg font-semibold text-zinc-100">
             {getMonthLabel(monthCursor)}
           </h2>
         </div>
@@ -62,14 +62,14 @@ export function AvailabilityCalendar({
           <button
             type="button"
             onClick={() => setMonthCursor((current) => shiftMonth(current, -1))}
-            className="rounded-[8px] border border-zinc-200 px-3 py-1.5 text-sm text-zinc-600 transition hover:border-primary-400 hover:text-primary-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-primary-500 dark:hover:text-primary-300"
+            className="rounded-[10px] border border-white/12 px-3 py-1.5 text-sm text-zinc-300 transition hover:border-primary-400/60 hover:text-primary-300"
           >
             이전
           </button>
           <button
             type="button"
             onClick={() => setMonthCursor((current) => shiftMonth(current, 1))}
-            className="rounded-[8px] border border-zinc-200 px-3 py-1.5 text-sm text-zinc-600 transition hover:border-primary-400 hover:text-primary-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-primary-500 dark:hover:text-primary-300"
+            className="rounded-[10px] border border-white/12 px-3 py-1.5 text-sm text-zinc-300 transition hover:border-primary-400/60 hover:text-primary-300"
           >
             다음
           </button>
@@ -117,17 +117,17 @@ export function AvailabilityCalendar({
         })}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-        <span className="rounded-full bg-emerald-500/12 px-2.5 py-1 text-emerald-700 dark:text-emerald-300">
+      <div className="mt-4 flex flex-wrap gap-2 text-xs text-zinc-400">
+        <span className="rounded-full bg-emerald-500/14 px-2.5 py-1 text-emerald-300">
           예약 가능
         </span>
-        <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-700 dark:text-amber-300">
+        <span className="rounded-full bg-amber-500/14 px-2.5 py-1 text-amber-300">
           문의 필요
         </span>
-        <span className="rounded-full bg-rose-500/12 px-2.5 py-1 text-rose-700 dark:text-rose-300">
+        <span className="rounded-full bg-rose-500/14 px-2.5 py-1 text-rose-300">
           예약됨
         </span>
-        <span className="rounded-full bg-zinc-900/5 px-2.5 py-1 text-zinc-600 dark:bg-white/5 dark:text-zinc-400">
+        <span className="rounded-full bg-white/5 px-2.5 py-1 text-zinc-400">
           선택 날짜: {formatDateLabel(selectedDate)}
         </span>
       </div>

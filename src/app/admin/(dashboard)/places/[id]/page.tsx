@@ -51,7 +51,7 @@ export default async function AdminPlacePage({
           </Link>
         </div>
 
-        <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="rounded-[20px] border border-white/10 bg-[rgba(11,14,20,0.92)] p-6 shadow-[0_14px_36px_-28px_rgba(0,0,0,0.74)]">
           <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
             장소 정보 수정
           </h1>
