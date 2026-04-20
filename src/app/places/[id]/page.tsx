@@ -126,6 +126,7 @@ export default async function PlaceDetailPage({
           <OneTimeCoachBubble
             storageKey="coach:edit-venue:v1"
             message="잘못된 정보가 있으면 수정해 주세요"
+            placement="bottom"
           >
             <Link
               href={editHref}

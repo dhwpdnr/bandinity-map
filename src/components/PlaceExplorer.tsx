@@ -315,7 +315,10 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 sm:block sm:px-0 sm:pb-0">
-              <div className="relative mb-3 flex items-center justify-between gap-3 sm:mb-5" ref={regionMenuRef}>
+              <div
+                className="relative z-20 mb-3 flex items-center justify-between gap-3 sm:mb-5"
+                ref={regionMenuRef}
+              >
                 <div className="flex min-w-0 items-center gap-2">
                   <h2 className="min-w-0 text-[15px] font-semibold tracking-[-0.02em] text-zinc-200 sm:text-lg lg:text-[1.1rem]">
                     공연장 목록 ({filteredPlaces.length}곳)
@@ -341,6 +344,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
                 <OneTimeCoachBubble
                   storageKey="coach:add-venue:v1"
                   message="목록에 없는 공연장을 추가할 수 있어요"
+                  placement="bottom"
                 >
                   <Link
                     href="/venues/new"
@@ -372,7 +376,7 @@ export function PlaceExplorer({ places }: PlaceExplorerProps) {
                 )}
               </div>
 
-              <div className="-mx-1 min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-1 pt-1 pb-[max(7rem,calc(5rem+env(safe-area-inset-bottom,0px)))] sm:mx-0 sm:max-h-[52dvh] sm:px-0 sm:pb-6 lg:max-h-[calc(100dvh-340px)] lg:pr-2 lg:pb-8">
+              <div className="relative z-10 -mx-1 min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-1 pt-1 pb-[max(7rem,calc(5rem+env(safe-area-inset-bottom,0px)))] sm:mx-0 sm:max-h-[52dvh] sm:px-0 sm:pb-6 lg:max-h-[calc(100dvh-340px)] lg:pr-2 lg:pb-8">
                 <PlaceList
                   places={filteredPlaces}
                   selectedId={activeSelectedId}
