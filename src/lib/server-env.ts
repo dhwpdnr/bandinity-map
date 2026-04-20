@@ -3,6 +3,7 @@ import "server-only";
 export const serverEnv = {
   adminPassword: process.env.ADMIN_PASSWORD ?? "",
   adminSessionSecret: process.env.ADMIN_SESSION_SECRET ?? "",
+  userSessionSecret: process.env.USER_SESSION_SECRET ?? "",
   firebaseAdminProjectId:
     process.env.FIREBASE_ADMIN_PROJECT_ID ??
     process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ??
@@ -21,6 +22,16 @@ export function hasAdminCredentials(): boolean {
 
 export function hasAdminSessionConfig(): boolean {
   return Boolean(serverEnv.adminPassword && serverEnv.adminSessionSecret);
+}
+
+export function hasUserSessionConfig(): boolean {
+  return Boolean(serverEnv.userSessionSecret);
+}
+
+export function getMissingUserSessionEnvKeys(): string[] {
+  const keys: string[] = [];
+  if (!serverEnv.userSessionSecret) keys.push("USER_SESSION_SECRET");
+  return keys;
 }
 
 export function getMissingAdminEnvKeys(): string[] {
